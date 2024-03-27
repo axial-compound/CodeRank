@@ -1,2 +1,2 @@
 const express = require('express');
-const userServices = require('../services/')
+const userServices = require('../services/userServices');
