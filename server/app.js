@@ -1,13 +1,20 @@
 const express = require('express');
-const mongoConn = require('./database/connection');
+const bodyParser = require('body-parser');
+const {client} = require('./database/connection')
+const userRoutes = require('./APIs/routes/userRoutes');
+const unAuthRoutes = require('./APIs/routes/unAuthRoutes');
+const authMiddlewarefunc = require('./middleware/authMiddleware');
 const app = express();
 
 require('dotenv').config();
 
-app.use(express.json()); // for parsing application/json
+//app.use(express.json()); // for parsing application/json
+app.use(bodyParser.json());
 const port = 3000;
 
-app.use();
+//routes
+app.use('/user',authMiddlewarefunc,userRoutes);
+app.use('/',unAuthRoutes);
 
 
 app.listen(port, ()=>{
@@ -15,4 +22,6 @@ app.listen(port, ()=>{
 });
 
 //MongoDB connection
-mongoConn.on('error', console.error.bind(console, 'Connection error:'));
+client.catch(error => {
+    console.error(error);
+});
