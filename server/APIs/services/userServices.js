@@ -44,12 +44,25 @@ const authenticateUser = async(email,password) =>{
     }   
 };
 
+//only for checking
+
+const getusers = async (id) =>{
+    const user = await USER.findById(id);
+
+    if(!user){
+        throw new Error('No user found!') //error res is not defined
+    }
+    return user;
+}
+
 const codeSubmit = async () =>{
 
 };
 
-const getUserSubmittedCodes = async () =>{
+const getUserCodes = async () =>{
 
-}
+};
 
-module.exports = {registerUser,authenticateUser}; 
+
+
+module.exports = {registerUser,authenticateUser,getusers }; 
