@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const USER = require('../../database/models/userModel');
+const CODE = require('../../database/models/codeModel');
 
 const registerUser = async (email, name, password) => {
     try {
@@ -55,14 +56,44 @@ const getusers = async (id) =>{
     return user;
 }
 
-const codeSubmit = async () =>{
+const codeSubmit = async (tag,description,codeBody,codeLanguage,userId) =>{
+    const newCode = new CODE({
+        tag: tag,
+        description: description,
+        codeBody: codeBody,
+        codeLanguage: codeLanguage,
+        userReference: userId
+    });
+
+    await newCode.save();
+
+    return newCode;
 
 };
 
-const getUserCodes = async () =>{
+//this function should retrive specific code of user or all codes of user
+const getUserCodes = async (userId) => {
+    try {
+        
+            // If only userId is provided, fetch all codes by user and return their tags in JSON format
+            const codes = await CODE.find({ userReference: userId });
+            return codes.map(code => ({ tag: code.tag }));
+        
+    } catch (error) {
+        throw new Error('Error fetching codes by user');
+    }
+};
 
+const getSpecificCode = async (codeId) =>{
+    const code = await CODE.find({ _id: codeId});
+
+    if(!code){
+        throw new Error( "The requested resource could not be found." );
+    }
+
+    return code.toObject();
 };
 
 
 
-module.exports = {registerUser,authenticateUser,getusers }; 
+module.exports = {registerUser,authenticateUser,getusers, getUserCodes, codeSubmit, getSpecificCode}; 

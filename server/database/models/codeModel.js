@@ -16,15 +16,13 @@ const codeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  submissionTime: {
-    type: Date,
-    default: Date.now()
-  },
   userReference: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "USER" //reference to user model
   },
-});
+},
+{ timestamps: true }
+);
 
 const CODE = new mongoose.model("CODE", codeSchema);
 
