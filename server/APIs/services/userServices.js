@@ -1,99 +1,164 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const USER = require('../../database/models/userModel');
-const CODE = require('../../database/models/codeModel');
+const express = require("express");
+const bcrypt = require("bcrypt");
+const USER = require("../../models/userModel");
+const CODE = require("../../models/codeModel");
 
-const registerUser = async (email, name, password) => {
-    try {
-        // Check if the email already exists
-        const existingUser = await USER.findOne({ email });
-        if (existingUser) {
-            console.log("Email already exists");
-            return; // Exit the function early if email already exists
-        }
+const crypto = require("crypto");
 
-        // Hash the password before storing it in the database
-        const hashedPassword = await bcrypt.hash(password, 10);
+//ENV file
+require('dotenv').config();
 
-        // Create a new user object
-        const newUser = new USER({
-            email: email,
-            name: name,
-            password: hashedPassword
-        });
+const aws_url = process.env.BUCKET; // Bucket URL
 
-        // Save the new user to the database
-        await newUser.save();
+//AWS  S3 Bucket
+const {
+  s3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+} = require("../../config/awsConfig");
 
-    } catch (error) {
-        console.error("Error registering user:", error);
-    }
+//------------------------------------------------------------XX create a unique key based on userid and codeBody  XX-----------------------------------------------------------
+const generateUniqueKey = async (userId, codeBody) => {
+  let hash = crypto.createHash("sha256").update(codeBody).digest("hex");
+
+  //combine the hash with userid  to make it unique
+  const uniqueKey = `${userId}_${hash}`;
+
+  return uniqueKey;
 };
 
+//------------------------------------------------------------XX Register User  XX-----------------------------------------------------------
+const registerUser = async (email, name, password) => {
+  try {
+    // Check if the email already exists
+    const existingUser = await USER.findOne({ email });
+    if (existingUser) {
+      console.log("Email already exists");
+      return; // Exit the function early if email already exists
+    }
 
-const authenticateUser = async(email,password) =>{
-    try {
-        const user = await USER.findOne({email});
+    // Hash the password before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        if(!user && (await bcrypt.compare(password,user.password))){
-            throw new error('Invalid email and password');
-        }
-    
-        return user;
-    } catch (error) {
-        console.error(error);
-    }   
+    // Create a new user object
+    const newUser = new USER({
+      email: email,
+      name: name,
+      password: hashedPassword,
+    });
+
+    // Save the new user to the database
+    await newUser.save();
+  } catch (error) {
+    console.error("Error registering user:", error);
+  }
+};
+
+//------------------------------------------------------------XX Authenticate User  XX-----------------------------------------------------------
+const authenticateUser = async (email, password) => {
+  try {
+    const user = await USER.findOne({ email });
+
+    if (!user && (await bcrypt.compare(password, user.password))) {
+      throw new error("Invalid email and password");
+    }
+
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 //only for checking
 
-const getusers = async (id) =>{
-    const user = await USER.findById(id);
+const getusers = async (id) => {
+  const user = await USER.findById(id);
 
-    if(!user){
-        throw new Error('No user found!') //error res is not defined
-    }
-    return user;
-}
+  if (!user) {
+    throw new Error("No user found!"); //error res is not defined
+  }
+  return user;
+};
 
-const codeSubmit = async (tag,description,codeBody,codeLanguage,userId) =>{
-    const newCode = new CODE({
-        tag: tag,
-        description: description,
-        codeBody: codeBody,
-        codeLanguage: codeLanguage,
-        userReference: userId
+//------------------------------------------------------------XX Code Submit  XX-----------------------------------------------------------
+const codeSubmit = async (tag, description, codeBody, codeLanguage, userId) => {
+  try {
+    const uniqueKey = await generateUniqueKey(userId, codeBody);
+
+    const codeurl = `${aws_url}${uniqueKey}`;
+
+    console.log(codeurl);
+
+    //check if code exist in database with same user and body
+    const existingCode = await CODE.findOne({
+      userReference: userId,
+      codeBodyURL: codeurl,
     });
 
-    await newCode.save();
+    if (existingCode) {
+      return {
+        msg: "Code Exists",
+        tag: existingCode.tag,
+        link: existingCode.codeBodyURL,
+      };
+    } else {
+      const putObjectParams = {
+        Bucket: "coderank-codes",
+        Key: uniqueKey,
+        Body: codeBody,
+      };
 
-    return newCode;
+      await s3Client.send(new PutObjectCommand(putObjectParams));
 
+      const newCode = new CODE({
+        tag: tag,
+        description: description,
+        codeBodyURL: codeurl,
+        codeLanguage: codeLanguage,
+        userReference: userId,
+      });
+
+      await newCode.save();
+
+      return newCode;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
-//this function should retrive specific code of user or all codes of user
+//------------------------------------------------------------XX  all codes of user  XX-----------------------------------------------------------
+
 const getUserCodes = async (userId) => {
-    try {
-        
-            // If only userId is provided, fetch all codes by user and return their tags in JSON format
-            const codes = await CODE.find({ userReference: userId });
-            return codes.map(code => ({ tag: code.tag }));
-        
-    } catch (error) {
-        throw new Error('Error fetching codes by user');
-    }
+  try {
+    // If only userId is provided, fetch all codes by user and return their tags in JSON format
+    const codes = await CODE.find({ userReference: userId });
+    return codes.map((code) => ({ tag: code.tag }));
+  } catch (error) {
+    throw new Error("Error fetching codes by user");
+  }
 };
 
-const getSpecificCode = async (codeId) =>{
-    const code = await CODE.find({ _id: codeId});
+//------------------------------------------------------------XX Get Specific Code By user  XX-----------------------------------------------------------
+const getSpecificCode = async (codeId) => {
+  try {
+    const code = await CODE.findById(codeId);
 
-    if(!code){
-        throw new Error( "The requested resource could not be found." );
+    if (!code) {
+      throw new Error("No code found!");
     }
 
-    return code.toObject();
+    return code;
+  } catch (error) {
+    throw new Error("Error getting the specified code");
+  }
 };
 
-
-
-module.exports = {registerUser,authenticateUser,getusers, getUserCodes, codeSubmit, getSpecificCode}; 
+module.exports = {
+  registerUser,
+  authenticateUser,
+  getusers,
+  getUserCodes,
+  codeSubmit,
+  getSpecificCode,
+};

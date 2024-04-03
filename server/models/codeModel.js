@@ -8,7 +8,7 @@ const codeSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  codeBody: {
+  codeBodyURL: {
     type: String,
     required: true
   },

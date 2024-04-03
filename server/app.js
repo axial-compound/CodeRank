@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {client} = require('./database/connection')
+//mongodb client
+const {mongodbClient} = require('./config/mongodbConfig');
+//aws client
+const {s3Client,ListBucketsCommand} = require('./config/awsConfig');
 const userRoutes = require('./APIs/routes/userRoutes');
 const unAuthRoutes = require('./APIs/routes/unAuthRoutes');
 const authMiddlewarefunc = require('./middleware/authMiddleware');
@@ -22,6 +25,19 @@ app.listen(port, ()=>{
 });
 
 //MongoDB connection
-client.catch(error => {
+mongodbClient.catch(error => {
     console.error(error);
 });
+
+//Check if aws bucket is accessible
+const testS3 = async () =>{
+    try {
+        const data = await s3Client.send(new ListBucketsCommand({}));
+        console.log("AWS Bucket Accessible",data.Buckets);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+//call the test function
+testS3();

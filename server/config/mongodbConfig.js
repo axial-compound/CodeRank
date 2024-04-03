@@ -3,12 +3,12 @@ require('dotenv').config();
 
 const uri = process.env.MONGODB_URI;
 
-const client = mongoose.connect(uri);
+const mongodbClient = mongoose.connect(uri);
 
-client.then(() => {
+mongodbClient.then(() => {
     console.log('Connected to MongoDB');
 }).catch((error) => {
     console.error('Error connecting to MongoDB:', error);
 });
 
-module.exports = {client};
+module.exports = {mongodbClient};
