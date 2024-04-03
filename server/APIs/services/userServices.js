@@ -8,7 +8,7 @@ const crypto = require("crypto");
 //ENV file
 require('dotenv').config();
 
-const aws_url = process.env.BUCKET; // Bucket URL
+const aws_url = process.env.AWS_BUCKET; // Bucket URL
 
 //AWS  S3 Bucket
 const {

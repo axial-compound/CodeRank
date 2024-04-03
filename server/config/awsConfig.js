@@ -4,8 +4,8 @@ const { S3Client , ListBucketsCommand , GetObjectCommand , PutObjectCommand} = r
 //load the dotenv 
 require('dotenv').config();
 
-const access_key = process.env.ACCESS_KEY;
-const key = process.env.SECRET_ACCESS_KEY;
+const access_key = process.env.AWS_ACCESS_KEY;
+const key = process.env.AWS_SECRET_ACCESS_KEY;
 
 //define the region, bucket and credentials
 
