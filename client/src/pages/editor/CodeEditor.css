@@ -1,211 +1,224 @@
 /* Add icon font styles */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
 /* Base styles for the code editor page */
 .code-editor-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
-  
+
 /* Navbar styles */
 .navbar {
-    background-color: #0F0F0F;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
+  background: radial-gradient(circle, rgba(0,0,0,1) 76%, rgba(8,55,22,1) 100%);
+  color: white;
+  border-bottom: 1px solid #222831;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
 }
-  
+
 /* Main content styles */
 .main-content {
-    display: flex;
-    background-color: #0F0F0F;
-    border: #ccc solid 1px;
-    color: #ccc;
-    flex: 1;
+  display: flex;
+  background: radial-gradient(circle, rgba(0,0,0,1) 76%, rgba(8,55,22,1) 100%);
+  color: #ccc;
+  flex: 1;
 }
-  
+
 /* Left partition styles */
 .left-partition {
-    display: flex;
-    overflow-x: hidden; /* Hide horizontal overflow */
-    border-right: 1px solid #ccc; /* Add right border */
-    cursor: pointer; /* Change cursor to indicate resize */
-    min-width: 20%; /* Set a minimum width for the left partition */
-    max-width: 30% ; /* Set a maximum width for the left partition */
+  display: flex;
+  overflow-x: hidden;
+  border-right: 1px solid #222831;
+  cursor: pointer;
+  width: 20%;
+  min-width: 20%;
+  max-width: 30%;
 }
 
 /* Nav vertical styles */
 .nav-vertical {
-    flex: 0 0 auto; /* Do not grow, do not shrink, initial width is auto */
-    width: 50px; /* Set a fixed width for vertical nav */
-    border-right: #ccc solid 1px; /* Add right border */
+  flex: 0 0 auto;
+  width: 20%;
+  border-right: 1px solid #222831;
 }
 
 .nav-vertical ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 .nav-vertical ul li {
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .nav-vertical ul li:hover {
-    background-color: #005B41;
+  background-color: #005b41;
 }
 
 /* File section styles */
 .file-section {
-    flex: 1; /* Grow to fill remaining space */
+  flex: 1;
+  width: 80%;
+}
+
+.file-section ul {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+.file-section li{
+  padding: 5px;
+  
+}
+
+.file-section li:hover{
+  background-color: #005b41;
 }
 
 /* Add this CSS for the selected editor in the left partition */
 .left-partition .selected-editor {
-    background-color: #4d4d4d; 
-    color: #EEEEEE; 
+  background-color: #4d4d4d;
+  color: #eeeeee;
 }
 
 /* Right partition styles */
 .right-partition {
-    width: 75%;
-    min-width: 40%;
-    height: 100%; 
-  }
+  width: 60%;
+  min-width: 50%;
+  max-width: 60%;
+  height: 100%;
+}
 
-  
 /* Nav styles */
 nav {
-    display: flex;
-
-    
+  display: flex;
 }
 
 /* Nav left styles */
 .nav-left {
-    display: flex;
-    overflow-x: auto; /* Enable horizontal scrolling */
-    white-space: nowrap; /* Prevent content from wrapping */
-    
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent content from wrapping */
 }
 
 .nav-left ul {
-    margin-block-start: 0;
-    margin-block-end: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0px;
+  border-left: 5px solid #222831;
+}
+
+.nav-left li{
+  border-right: 1px solid #222831;
 }
 
 /* Hide scrollbar for WebKit browsers */
 .nav-left::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* Add this CSS for the selected editor in the left navigation */
 .nav-left .opened-editor.selected-editor {
-    background-color: #4d4d4d; /* Set background color */
-    border-top: #3048fdb7 3px solid;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    color: #EEEEEE; /* Set text color */
+  background-color: #4d4d4d; 
+  border-top: #3048fdb7 3px solid;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  color: #eeeeee; 
 }
 
 /* Opened editor styles */
 .opened-editor {
-    display: inline-block;
-    padding: 5px 10px;
-    margin-right: 10px;
-    border: 1px solid transparent; /* Add transparent border initially */
-    cursor: pointer;
+  display: inline-block;
+  padding: 5px 10px;
+  margin-right: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
 }
 
 .opened-editor:hover {
-    background-color: #005B41; /* Change border color on hover */
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+  background-color: #005b41;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .nav-left li {
-    margin-right: 2px; /* Add spacing between nav items */
-    margin-bottom: 0;
+  margin-right: 2px;
+  margin-bottom: 0;
 }
 
 /* Nav right styles */
 .nav-right {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 /* Selected editor styles */
 .selected-editor {
-    background-color: #4d4d4d;; /* Set background color */
-    color: #EEEEEE; /* Set text color */
+  background-color: #4d4d4d;
+  color: #eeeeee;
 }
 
 /* Output block styles */
 .output-block {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    border-left: 1px solid #ccc; /* Add border */
-   
-    padding: 10px; /* Add padding */
-    
-    
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-left: 1px solid #222831;
+  width: 20%;
+  min-width: 20%;
+  max-width: 20%;
+  padding: 10px;
 }
 
 /* Output top styles */
 .output-top {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px; /* Add spacing between top and output area */
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
 }
 
 /* Output textarea styles */
-.output-area,
-.testcase-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px; /* Add spacing between text areas */
+.output-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
-.output-textarea,
-.testcase-textarea {
-    width: 100%;
-    flex: 1;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 5px; /* Add border radius */
-    background-color: #4d4d4d; /* White background color */
-    resize: vertical; /* Allow vertical resizing */
-    overflow-y: auto; /* Add vertical scrollbar if needed */
+.output-textarea {
+  width: 100%;
+  height: 50%;
+  border: 1px solid #222831;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background-color: #4d4d4d; 
+  resize: vertical; 
+  overflow-y: auto;
 }
 
-.output-textarea::placeholder,
-.testcase-textarea::placeholder {
-    color: #999;
+.output-textarea::placeholder {
+  color: #999;
 }
 
 /* Button styles */
 .output-block button {
-    background-color: #005B41;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background-color 0.3s ease;
+  background-color: #005b41;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .output-block button:hover {
-    background-color: #00402e;
+  background-color: #00402e;
 }
-
-
-  

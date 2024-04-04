@@ -1,3 +1,4 @@
+// CodeEditor.jsx
 import { useState, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import "./CodeEditor.css"; // Import the CSS file for styling
@@ -48,16 +49,22 @@ const CodeEditor = () => {
   };
 
   const handleResize = (e) => {
-    const leftPartitionWidth = leftPartitionRef.current.offsetWidth;
-    const rightPartitionWidth = rightPartitionRef.current.offsetWidth;
-    const totalWidth = leftPartitionWidth + rightPartitionWidth;
-    const newLeftPartitionWidth =
-      e.clientX - leftPartitionRef.current.getBoundingClientRect().left;
-    const newRightPartitionWidth = totalWidth - newLeftPartitionWidth;
+    
+    const newLeftPartitionWidth = `${(e.clientX / window.innerWidth) * 100}%`;
+    const newRightPartitionWidth = `${((window.innerWidth - e.clientX) / window.innerWidth) * 100}%`;
 
-    leftPartitionRef.current.style.width = `${newLeftPartitionWidth}px`;
-    rightPartitionRef.current.style.width = `${newRightPartitionWidth}px`;
-  };
+    leftPartitionRef.current.style.width = newLeftPartitionWidth;
+    rightPartitionRef.current.style.width = newRightPartitionWidth;
+
+    // Add event listeners to handle mouse leaving window bounds or releasing mouse button
+    document.addEventListener("mouseleave", stopResize);
+    document.addEventListener("mouseup", stopResize);
+};
+
+const stopResize = () => {
+    document.removeEventListener("mouseleave", stopResize);
+    document.removeEventListener("mouseup", stopResize);
+};
 
   return (
     <div className="code-editor-page">
@@ -176,12 +183,6 @@ const CodeEditor = () => {
               readOnly
               value={outputValue}
               placeholder="Output will appear here..."
-            />
-          </div>
-          <div className="testcase-area">
-            <textarea
-              className="testcase-textarea"
-              placeholder="Enter test cases here..."
             />
           </div>
         </div>

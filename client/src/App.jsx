@@ -1,7 +1,7 @@
 import { Routes, Route} from "react-router-dom";
 import Login from "./pages/login/login";
 import './App.css'
-import Register from "./pages/register/register";
+import Register from "./pages/login/register";
 import CodeEditor from "./pages/editor/CodeEditor";
 
 function App() {
