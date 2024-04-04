@@ -1,0 +1,61 @@
+/* CodeEditor.css */
+
+/* Base styles for the code editor page */
+.code-editor-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  /* Navbar styles */
+  .navbar {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  /* Main content styles */
+  .main-content {
+    display: flex;
+    flex: 1;
+  }
+  
+  /* Left partition styles */
+  .left-partition {
+    width: 25%;
+    padding: 20px;
+  }
+  
+  /* Right partition styles */
+  .right-partition {
+    width: 75%;
+    padding: 20px;
+  }
+  
+  /* Nav styles */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  /* Nav left styles */
+  .nav-left {
+    display: flex;
+  }
+  
+  /* Nav right styles */
+  .nav-right {
+    flex-grow: 1;
+  }
+  
+  /* Selected editor styles */
+  .selected-editor {
+    height: calc(100vh - 130px); /* Adjusted height to accommodate the nav and buttons */
+  }
+  
+  /* Additional styles can be added as needed */
+  
