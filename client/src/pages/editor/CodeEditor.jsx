@@ -67,6 +67,13 @@ const CodeEditor = () => {
         </div>
         <div className="right-partition">
           <nav>
+            <div className="lang-select">
+                <select name="Language" id="language">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option  value="java">Java</option>
+                </select>
+            </div>
             <div className="nav-left">
               <ul>
                 {editors.map((editor) => (

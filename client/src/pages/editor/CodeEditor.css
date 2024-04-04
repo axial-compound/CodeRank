@@ -8,6 +8,7 @@
 /* Navbar styles */
 .navbar {
     background-color: #242424;
+    border-bottom: #ccc solid 1px;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -26,8 +27,18 @@
 /* Left partition styles */
 .left-partition {
     width: 25%;
-    padding: 20px;
     border-right: #ccc  solid 1px;
+}
+
+.left-partition ul{
+    list-style-type: none;
+    padding-inline-start: 0px;
+}
+
+.left-partition li{
+    display: flex;
+    justify-content: space-between;
+    padding: 3px;
 }
 
 /* Add this CSS for the selected editor in the left partition */
@@ -39,13 +50,12 @@
 /* Right partition styles */
 .right-partition {
     width: 75%;
-    padding: 20px;
+    
 }
   
 /* Nav styles */
 nav {
     display: flex;
-    justify-content: space-between;
 
     
 }
@@ -71,6 +81,7 @@ nav {
 /* Add this CSS for the selected editor in the left navigation */
 .nav-left .opened-editor.selected-editor {
     background-color: #4d4d4d; /* Set background color */
+    border-top: #3048fdb7 2px solid;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     color: #000000; /* Set text color */
@@ -100,6 +111,7 @@ nav {
 /* Nav right styles */
 .nav-right {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
 }
 
