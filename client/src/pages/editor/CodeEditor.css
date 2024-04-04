@@ -1,3 +1,6 @@
+/* Add icon font styles */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
 /* Base styles for the code editor page */
 .code-editor-page {
     display: flex;
@@ -7,8 +10,7 @@
   
 /* Navbar styles */
 .navbar {
-    background-color: #242424;
-    border-bottom: #ccc solid 1px;
+    background-color: #0F0F0F;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -19,39 +21,62 @@
 /* Main content styles */
 .main-content {
     display: flex;
-    background-color: #141414;
+    background-color: #0F0F0F;
+    border: #ccc solid 1px;
     color: #ccc;
     flex: 1;
 }
   
 /* Left partition styles */
 .left-partition {
-    width: 25%;
-    border-right: #ccc  solid 1px;
-}
-
-.left-partition ul{
-    list-style-type: none;
-    padding-inline-start: 0px;
-}
-
-.left-partition li{
     display: flex;
-    justify-content: space-between;
-    padding: 3px;
+    overflow-x: hidden; /* Hide horizontal overflow */
+    border-right: 1px solid #ccc; /* Add right border */
+    cursor: pointer; /* Change cursor to indicate resize */
+    min-width: 20%; /* Set a minimum width for the left partition */
+    max-width: 30% ; /* Set a maximum width for the left partition */
+}
+
+/* Nav vertical styles */
+.nav-vertical {
+    flex: 0 0 auto; /* Do not grow, do not shrink, initial width is auto */
+    width: 50px; /* Set a fixed width for vertical nav */
+    border-right: #ccc solid 1px; /* Add right border */
+}
+
+.nav-vertical ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav-vertical ul li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav-vertical ul li:hover {
+    background-color: #005B41;
+}
+
+/* File section styles */
+.file-section {
+    flex: 1; /* Grow to fill remaining space */
 }
 
 /* Add this CSS for the selected editor in the left partition */
 .left-partition .selected-editor {
-    background-color: #4d4d4d;; /* Set background color */
-    color: #ffffff; /* Set text color */
+    background-color: #4d4d4d; 
+    color: #EEEEEE; 
 }
 
 /* Right partition styles */
 .right-partition {
     width: 75%;
-    
-}
+    min-width: 40%;
+    height: 100%; 
+  }
+
   
 /* Nav styles */
 nav {
@@ -65,7 +90,7 @@ nav {
     display: flex;
     overflow-x: auto; /* Enable horizontal scrolling */
     white-space: nowrap; /* Prevent content from wrapping */
-    margin: 0 !important;
+    
 }
 
 .nav-left ul {
@@ -81,10 +106,10 @@ nav {
 /* Add this CSS for the selected editor in the left navigation */
 .nav-left .opened-editor.selected-editor {
     background-color: #4d4d4d; /* Set background color */
-    border-top: #3048fdb7 2px solid;
+    border-top: #3048fdb7 3px solid;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    color: #000000; /* Set text color */
+    color: #EEEEEE; /* Set text color */
 }
 
 /* Opened editor styles */
@@ -93,18 +118,17 @@ nav {
     padding: 5px 10px;
     margin-right: 10px;
     border: 1px solid transparent; /* Add transparent border initially */
-    border-radius: 5px;
     cursor: pointer;
 }
 
 .opened-editor:hover {
-    background-color: #4d4d4d; /* Change border color on hover */
+    background-color: #005B41; /* Change border color on hover */
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
 
 .nav-left li {
-    margin-right: 10px; /* Add spacing between nav items */
+    margin-right: 2px; /* Add spacing between nav items */
     margin-bottom: 0;
 }
 
@@ -118,7 +142,70 @@ nav {
 /* Selected editor styles */
 .selected-editor {
     background-color: #4d4d4d;; /* Set background color */
-    color: #000000; /* Set text color */
+    color: #EEEEEE; /* Set text color */
 }
 
-/* Additional styles can be added as needed */
+/* Output block styles */
+.output-block {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-left: 1px solid #ccc; /* Add border */
+   
+    padding: 10px; /* Add padding */
+    
+    
+}
+
+/* Output top styles */
+.output-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px; /* Add spacing between top and output area */
+}
+
+/* Output textarea styles */
+.output-area,
+.testcase-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* Add spacing between text areas */
+}
+
+.output-textarea,
+.testcase-textarea {
+    width: 100%;
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px; /* Add border radius */
+    background-color: #4d4d4d; /* White background color */
+    resize: vertical; /* Allow vertical resizing */
+    overflow-y: auto; /* Add vertical scrollbar if needed */
+}
+
+.output-textarea::placeholder,
+.testcase-textarea::placeholder {
+    color: #999;
+}
+
+/* Button styles */
+.output-block button {
+    background-color: #005B41;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.output-block button:hover {
+    background-color: #00402e;
+}
+
+
+  
