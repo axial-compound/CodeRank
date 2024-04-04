@@ -3,7 +3,9 @@ import { Editor } from "@monaco-editor/react";
 import "./CodeEditor.css"; // Import the CSS file for styling
 
 const CodeEditor = () => {
-  const [editors, setEditors] = useState([{ id: 1, value: "", language: "javascript" }]);
+  const [editors, setEditors] = useState([
+    { id: 1, value: "", language: "javascript" },
+  ]);
   const [selectedEditorId, setSelectedEditorId] = useState(1); // Initially select the first editor by its id
 
   const addEditor = () => {
@@ -14,7 +16,7 @@ const CodeEditor = () => {
   };
 
   const handleEditorChange = (id, value) => {
-    const updatedEditors = editors.map(editor =>
+    const updatedEditors = editors.map((editor) =>
       editor.id === id ? { ...editor, value: value } : editor
     );
     setEditors(updatedEditors);
@@ -26,11 +28,13 @@ const CodeEditor = () => {
 
   const handleDeleteEditor = (id) => {
     // Filter out the editor with the given id
-    const updatedEditors = editors.filter(editor => editor.id !== id);
+    const updatedEditors = editors.filter((editor) => editor.id !== id);
     setEditors(updatedEditors);
     // If the deleted editor was the selected one, select the first editor in the list
     if (selectedEditorId === id) {
-      setSelectedEditorId(updatedEditors.length > 0 ? updatedEditors[0].id : null);
+      setSelectedEditorId(
+        updatedEditors.length > 0 ? updatedEditors[0].id : null
+      );
     }
   };
 
@@ -43,28 +47,44 @@ const CodeEditor = () => {
       <div className="main-content">
         <div className="left-partition">
           <h2>Open Editors</h2>
+          <button onClick={addEditor}>Add Editor</button>
           <ul>
-            {editors.map(editor => (
-              <li key={editor.id} onClick={() => handleEditorSelect(editor.id)}>
+            {editors.map((editor) => (
+              <li
+                key={editor.id}
+                onClick={() => handleEditorSelect(editor.id)}
+                className={
+                  editor.id === selectedEditorId ? "selected-editor" : ""
+                }
+              >
                 Editor {editor.id}
-                <button onClick={() => handleDeleteEditor(editor.id)}>Delete</button>
+                <button onClick={() => handleDeleteEditor(editor.id)}>
+                  Delete
+                </button>
               </li>
             ))}
           </ul>
-          <button onClick={addEditor}>Add Editor</button>
         </div>
         <div className="right-partition">
           <nav>
             <div className="nav-left">
-              <button>Run</button>
-              <button>Submit</button>
-            </div>
-            <div className="nav-right">
               <ul>
-                {editors.map(editor => (
-                  <li key={editor.id} onClick={() => handleEditorSelect(editor.id)}>Editor {editor.id}</li>
+                {editors.map((editor) => (
+                  <li
+                    key={editor.id}
+                    onClick={() => handleEditorSelect(editor.id)}
+                    className={`opened-editor ${
+                      editor.id === selectedEditorId ? "selected-editor" : ""
+                    }`} // Apply conditional class
+                  >
+                    Editor {editor.id}
+                  </li>
                 ))}
               </ul>
+            </div>
+            <div className="nav-right">
+              <button>Run</button>
+              <button>Submit</button>
             </div>
           </nav>
           <div className="selected-editor">
@@ -76,8 +96,14 @@ const CodeEditor = () => {
               }}
               height="calc(100vh - 130px)"
               theme="vs-dark"
-              language={editors.find(editor => editor.id === selectedEditorId)?.language || "javascript"}
-              value={editors.find(editor => editor.id === selectedEditorId)?.value || ""}
+              language={
+                editors.find((editor) => editor.id === selectedEditorId)
+                  ?.language || "javascript"
+              }
+              value={
+                editors.find((editor) => editor.id === selectedEditorId)
+                  ?.value || ""
+              }
               onChange={(value) => handleEditorChange(selectedEditorId, value)}
             />
           </div>

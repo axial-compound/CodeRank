@@ -1,61 +1,112 @@
-/* CodeEditor.css */
-
 /* Base styles for the code editor page */
 .code-editor-page {
     display: flex;
     flex-direction: column;
     height: 100vh;
-  }
+}
   
-  /* Navbar styles */
-  .navbar {
-    background-color: #333;
+/* Navbar styles */
+.navbar {
+    background-color: #242424;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-  }
+}
   
-  /* Main content styles */
-  .main-content {
+/* Main content styles */
+.main-content {
     display: flex;
+    background-color: #141414;
+    color: #ccc;
     flex: 1;
-  }
+}
   
-  /* Left partition styles */
-  .left-partition {
+/* Left partition styles */
+.left-partition {
     width: 25%;
     padding: 20px;
-  }
-  
-  /* Right partition styles */
-  .right-partition {
+    border-right: #ccc  solid 1px;
+}
+
+/* Add this CSS for the selected editor in the left partition */
+.left-partition .selected-editor {
+    background-color: #4d4d4d;; /* Set background color */
+    color: #ffffff; /* Set text color */
+}
+
+/* Right partition styles */
+.right-partition {
     width: 75%;
     padding: 20px;
-  }
+}
   
-  /* Nav styles */
-  nav {
+/* Nav styles */
+nav {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  /* Nav left styles */
-  .nav-left {
+
+    
+}
+
+/* Nav left styles */
+.nav-left {
     display: flex;
-  }
-  
-  /* Nav right styles */
-  .nav-right {
-    flex-grow: 1;
-  }
-  
-  /* Selected editor styles */
-  .selected-editor {
-    height: calc(100vh - 130px); /* Adjusted height to accommodate the nav and buttons */
-  }
-  
-  /* Additional styles can be added as needed */
-  
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent content from wrapping */
+    margin: 0 !important;
+}
+
+.nav-left ul {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.nav-left::-webkit-scrollbar {
+    display: none;
+}
+
+/* Add this CSS for the selected editor in the left navigation */
+.nav-left .opened-editor.selected-editor {
+    background-color: #4d4d4d; /* Set background color */
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    color: #000000; /* Set text color */
+}
+
+/* Opened editor styles */
+.opened-editor {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border: 1px solid transparent; /* Add transparent border initially */
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.opened-editor:hover {
+    background-color: #4d4d4d; /* Change border color on hover */
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.nav-left li {
+    margin-right: 10px; /* Add spacing between nav items */
+    margin-bottom: 0;
+}
+
+/* Nav right styles */
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Selected editor styles */
+.selected-editor {
+    background-color: #4d4d4d;; /* Set background color */
+    color: #000000; /* Set text color */
+}
+
+/* Additional styles can be added as needed */
