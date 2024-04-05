@@ -1,10 +1,6 @@
-FROM node:18.12.1 
-
+FROM node:lts-alpine3.19
 WORKDIR /server
-COPY package.json /server
-
+COPY . /server
 RUN npm install
-
-COPY . .
 EXPOSE 3000
-CMD ["node", "app.js"]
+CMD node app.js
