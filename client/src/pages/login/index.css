@@ -1,69 +1,75 @@
 /* Base styles for the login container */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(151deg, rgba(0,0,0,1) 20%, rgba(9,121,31,1) 87%);
-    color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(
+    151deg,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(64, 10, 92, 1) 87%
+  );
+  color: #fff;
 }
 
 /* Login form styles */
 .login-form {
-    background: linear-gradient(135deg, #212121, #303030);
+  background: linear-gradient(135deg, #212121, #303030);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
-    width: 400px;
-    max-width: 90%;
+
+  width: 400px;
+  max-width: 90%;
 }
 
 .login-form h2 {
-    margin-bottom: 30px;
-    font-size: 24px;
-    text-align: center;
+    
+  margin-bottom: 30px;
+  font-size: 24px;
+  text-align: center;
 }
 
 /* Form group styles */
 .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .form-group input {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #222831;
-    border-radius: 8px;
-    background-color: #333;
-    color: #ccc;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #222831;
+  border-radius: 8px;
+  background-color: #333;
+  color: #ccc;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
 }
 
 .form-group input:focus {
-    outline: none;
-    border-color: #4caf50;
+  outline: none;
+  border-color: #7f07a4;
 }
 
 /* Submit button styles */
 .login-form button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 15px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    width: 100%;
+  background-color: #7f07a4;
+  color: #fff;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100%;
 }
 
 .login-form button:hover {
-    background-color: #388e3c;
+  background-color: #340443;
 }
