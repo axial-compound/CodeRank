@@ -13,6 +13,11 @@
   );
 }
 
+h2 {
+  margin-top: 0;
+  padding-top: 10px;
+}
+
 /* Navbar styles */
 .navbar {
   background: rgba(179, 171, 171, 0.2);
@@ -60,14 +65,19 @@
   max-width: 30%;
 }
 
+.lang-select {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
 /* Nav vertical styles */
 .nav-vertical {
   flex: 0 0 auto;
   width: 20%;
   border-right: 1px solid #222831;
 }
-
-
 
 .nav-vertical ul {
   list-style-type: none;
@@ -86,9 +96,9 @@
   background-color: #7f07a4;
 }
 
- .selected-tab {
-  
+.selected-tab {
   border-left: #3048fdb7 3px solid;
+  background-color: #0000008b;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   color: #eeeeee;
@@ -96,20 +106,47 @@
 
 /* File section styles */
 .file-section {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   width: 80%;
   max-height: 100%;
   overflow-y: auto;
-  
 }
 
+.open-editors {
+  padding-left: 10px;
+  position: sticky;
+  top: 0;
+  
+  padding-bottom: 5px;
+  border-bottom: 1px solid #222831;
+}
+
+.add-button {
+  color: white;
+  background-color: #7f07a4;
+  border: none;
+  padding: 8px;
+  border-radius: 30%;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  transition: background-color 0.3s ease;
+}
 /* .file-section input[type="text"] {
   pointer-events: auto;
 } */
 
 .file-section ul {
+  flex: 1; /* Take remaining space */
+  overflow-y: auto; /* Enable scrolling */
   list-style-type: none;
   padding-inline-start: 0;
+}
+
+.file-section ul::-webkit-scrollbar {
+  display: none;
 }
 
 .file-section li {
@@ -123,19 +160,31 @@
   transition: background-color 0.3s ease;
 }
 
-.file-section button {
-  
+.file-section li:hover {
   background-color: #7f07a4;
+}
+
+.submit-all {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  border-top: 1px solid #222831;
+  
+  justify-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.submit-all-button {
+  background-color: #7f07a4;
+  color: white;
   border: none;
-  padding: 8px;
-  border-radius: 50%;
+  padding: 8px 16px;
+  border-radius: 5px;
   cursor: pointer;
   margin-right: 10px;
   transition: background-color 0.3s ease;
-}
-
-.file-section li:hover {
-  background-color: #7f07a4;
 }
 
 /* Add this CSS for the selected editor in the left partition */
@@ -163,8 +212,6 @@ nav {
   overflow-x: auto; /* Enable horizontal scrolling */
   white-space: nowrap; /* Prevent content from wrapping */
 }
-
-
 
 .nav-left ul {
   margin-block-start: 0;

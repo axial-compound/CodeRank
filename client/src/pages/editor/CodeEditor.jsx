@@ -1,18 +1,23 @@
 import { useState, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
-import {  CODE_SNIPPETS, EXTENSIONS } from "../../constant";
+import { CODE_SNIPPETS, EXTENSIONS } from "../../constant";
 import LanguageSelector from "../../components/languageSelector";
 import "./CodeEditor.css"; // Import the CSS file for styling
 
 const CodeEditor = () => {
   const [editors, setEditors] = useState([
-    { id: 1, name: "Editor 1", value: CODE_SNIPPETS["javascript"], language: "javascript" },
+    {
+      id: 1,
+      name: "Editor 1",
+      value: CODE_SNIPPETS["javascript"],
+      language: "javascript",
+    },
   ]);
   const [selectedEditorId, setSelectedEditorId] = useState(1); // Initially select the first editor by its id
   const [selectedNav, setSelectedNav] = useState("editors");
   const [outputValue] = useState("");
   const [newEditorName, setNewEditorName] = useState("");
-  const [selectedLanguage,setSelectedLanguage] = useState("javascript");
+  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const leftPartitionRef = useRef(null);
   const rightPartitionRef = useRef(null);
   const outputBlockRef = useRef(null);
@@ -21,19 +26,19 @@ const CodeEditor = () => {
     // Calculate the maximum id in the editors array
     const maxId = Math.max(...editors.map((editor) => editor.id));
     const newId = maxId + 1;
-  
+
     let editorName = newEditorName || `Editor ${newId}`;
-  
+
     // Create a set of existing editor names
     const existingNames = new Set(editors.map((editor) => editor.name));
-  
+
     // If the entered name already exists, append a count until a unique name is found
     let count = 1;
     while (existingNames.has(editorName)) {
       editorName = `${newEditorName || `Editor ${newId}`} ${count}`;
       count++;
     }
-  
+
     const newEditor = {
       id: newId,
       name: editorName,
@@ -42,19 +47,17 @@ const CodeEditor = () => {
     };
     setEditors([...editors, newEditor]);
     setSelectedEditorId(newId); // Set the newly added editor as selected
-    
+
     setNewEditorName(""); // Reset the new editor name input field
-  
-    
   };
 
   const handleChangeEditorName = (e) => {
     setNewEditorName(e.target.value);
   };
 
-  const handleLanguageSelect = (language) =>{
+  const handleLanguageSelect = (language) => {
     setSelectedLanguage(language);
-  }
+  };
 
   const handleEditorChange = (id, value) => {
     const updatedEditors = editors.map((editor) =>
@@ -146,22 +149,29 @@ const CodeEditor = () => {
           <div className="file-section">
             {selectedNav === "editors" && (
               <>
-                <h2>Open Editors</h2>
-                <div className="input-text">
-                  
-                  <input
-                    type="text"
-                    placeholder="Enter editor name"
-                    value={newEditorName}
-                    onChange={(e) => handleChangeEditorName(e)}
-                  />
-                  <div className="lang-select">
-                  <LanguageSelector selectedLanguage={selectedLanguage} onSelect={handleLanguageSelect} />
-
+                <div className="open-editors">
+                  <h2>Open Editors</h2>
+                  <div className="input-text">
+                    <div className="lang-select">
+                      <div>Name: &nbsp;</div>
+                      <input
+                        type="text"
+                        placeholder="Enter editor name"
+                        value={newEditorName}
+                        onChange={(e) => handleChangeEditorName(e)}
+                      />
+                    </div>
+                    <div className="lang-select">
+                      <div>Language: &nbsp;</div>
+                      <LanguageSelector
+                        selectedLanguage={selectedLanguage}
+                        onSelect={handleLanguageSelect}
+                      />
+                      <button className="add-button" onClick={addEditor}>
+                        <i className="fas fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
-                  <button onClick={addEditor}>
-                    <i className="fas fa-plus"></i>
-                  </button>
                 </div>
 
                 <ul>
@@ -173,10 +183,20 @@ const CodeEditor = () => {
                         editor.id === selectedEditorId ? "selected-editor" : ""
                       }
                     >
-                      {editor.name}{EXTENSIONS[editor.language]}
+                      {editor.name}
+                      {EXTENSIONS[editor.language]}
                     </li>
                   ))}
                 </ul>
+
+                <div className="submit-all">
+                  <button
+                    className="submit-all-button"
+                    // onClick={handleSubmitAll}
+                  >
+                    Submit All
+                  </button>
+                </div>
               </>
             )}
             {selectedNav === "submissions" && (
