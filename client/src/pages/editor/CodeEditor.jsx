@@ -1,25 +1,48 @@
-// CodeEditor.jsx
 import { useState, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import "./CodeEditor.css"; // Import the CSS file for styling
 
 const CodeEditor = () => {
   const [editors, setEditors] = useState([
-    { id: 1, value: "", language: "javascript" },
+    { id: 1, name: "Editor 1", value: "", language: "javascript" },
   ]);
   const [selectedEditorId, setSelectedEditorId] = useState(1); // Initially select the first editor by its id
   const [selectedNav, setSelectedNav] = useState("editors");
   const [outputValue] = useState("");
+  const [newEditorName, setNewEditorName] = useState("");
   const leftPartitionRef = useRef(null);
   const rightPartitionRef = useRef(null);
   const outputBlockRef = useRef(null);
 
   const addEditor = () => {
-    const newId = editors.length + 1;
-    const newEditor = { id: newId, value: "", language: "javascript" };
+    // Calculate the maximum id in the editors array
+    const maxId = Math.max(...editors.map(editor => editor.id));
+    const newId = maxId + 1;
+  
+    let editorName = newEditorName || `Editor ${newId}`;
+    
+    // Create a set of existing editor names
+    const existingNames = new Set(editors.map(editor => editor.name));
+    
+    // If the entered name already exists, append a count until a unique name is found
+    let count = 1;
+    while (existingNames.has(editorName)) {
+      editorName = `${newEditorName || `Editor ${newId}`} ${count}`;
+      count++;
+    }
+  
+    const newEditor = { id: newId, name: editorName, value: "", language: "javascript" };
     setEditors([...editors, newEditor]);
     setSelectedEditorId(newId); // Set the newly added editor as selected
+    setNewEditorName(""); // Reset the new editor name input field
   };
+
+
+  const handleChangeEditorName = (e) =>{
+    setNewEditorName(e.target.value);
+  }
+  
+  
 
   const handleEditorChange = (id, value) => {
     const updatedEditors = editors.map((editor) =>
@@ -32,12 +55,11 @@ const CodeEditor = () => {
     setSelectedEditorId(id); // Update the selected editor id
   };
 
-  const handleDeleteEditor = (id) => {
-    // Filter out the editor with the given id
-    const updatedEditors = editors.filter((editor) => editor.id !== id);
+  const handleDeleteEditor = (name) => {
+    const updatedEditors = editors.filter((editor) => editor.name !== name);
     setEditors(updatedEditors);
     // If the deleted editor was the selected one, select the first editor in the list
-    if (selectedEditorId === id) {
+    if (selectedEditorId === name) {
       setSelectedEditorId(
         updatedEditors.length > 0 ? updatedEditors[0].id : null
       );
@@ -80,19 +102,26 @@ const CodeEditor = () => {
           className="left-partition"
           ref={leftPartitionRef}
           onMouseDown={(e) => {
-            e.preventDefault();
-            document.addEventListener("mousemove", handleResize);
-            document.addEventListener("mouseup", () => {
-              document.removeEventListener("mousemove", handleResize);
-            });
+            // Only prevent default behavior if the user clicks on an input field, textarea, or any other type of field
+            if (!(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
+              e.preventDefault();
+              document.addEventListener("mousemove", handleResize);
+              document.addEventListener("mouseup", () => {
+                document.removeEventListener("mousemove", handleResize);
+              });
+            }
           }}
         >
           <div className="nav-vertical">
             <ul>
-              <li onClick={() => handleNavSelect("editors")}>
+              <li className={
+                        selectedNav === "editors" ? "selected-tab" : ""
+                      } onClick={() => handleNavSelect("editors")}>
                 <i className="fas fa-file-alt"></i>
               </li>
-              <li onClick={() => handleNavSelect("submissions")}>
+              <li className={
+                        selectedNav === "submissions" ? "selected-tab" : ""
+                      } onClick={() => handleNavSelect("submissions")}>
                 <i className="fas fa-database"></i>
               </li>
             </ul>
@@ -101,10 +130,20 @@ const CodeEditor = () => {
             {selectedNav === "editors" && (
               <>
                 <h2>Open Editors</h2>
+                <div className="input-text">
+                <input
+                  type="text"
+                  placeholder="Enter editor name"
+                  value={newEditorName}
+                  onChange={e => handleChangeEditorName(e)}
+                />
                 <button onClick={addEditor}>
                   <i className="fas fa-plus"></i>
                 </button>
-                <ul>
+                </div>
+                
+                
+                <ul >
                   {editors.map((editor) => (
                     <li
                       key={editor.id}
@@ -113,8 +152,7 @@ const CodeEditor = () => {
                         editor.id === selectedEditorId ? "selected-editor" : ""
                       }
                     >
-                      Editor {editor.id}
-                      
+                      {editor.name}
                     </li>
                   ))}
                 </ul>
@@ -134,8 +172,10 @@ const CodeEditor = () => {
             <div className="lang-select">
               <select name="Language" id="language">
                 <option value="javascript">JavaScript</option>
+                <option value="typescript">TypeScript</option>
                 <option value="python">Python</option>
                 <option value="java">Java</option>
+                <option value="cpp">C++</option>
               </select>
             </div>
             <div className="nav-left">
@@ -148,10 +188,10 @@ const CodeEditor = () => {
                       editor.id === selectedEditorId ? "selected-editor" : ""
                     }`} // Apply conditional class
                   >
-                    Editor {editor.id}&nbsp;&nbsp;
-                    <button onClick={() => handleDeleteEditor(editor.id)}>
-                        <i className="fas fa-times"></i>
-                      </button>
+                    {editor.name}&nbsp;&nbsp;
+                    <button className="delete-button" onClick={() => handleDeleteEditor(editor.name)}>
+                      <i className="fas fa-times"></i>
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -164,7 +204,7 @@ const CodeEditor = () => {
                   enabled: false,
                 },
               }}
-              height="calc(100vh - 75px)"
+              height="calc(100vh - 100px)"
               theme="vs-dark"
               language={
                 editors.find((editor) => editor.id === selectedEditorId)
@@ -174,7 +214,9 @@ const CodeEditor = () => {
                 editors.find((editor) => editor.id === selectedEditorId)
                   ?.value || ""
               }
-              onChange={(value) => handleEditorChange(selectedEditorId, value)}
+              onChange={(value) =>
+                handleEditorChange(selectedEditorId, value)
+              }
             />
           </div>
         </div>
