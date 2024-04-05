@@ -114,9 +114,7 @@ const CodeEditor = () => {
                       }
                     >
                       Editor {editor.id}
-                      <button onClick={() => handleDeleteEditor(editor.id)}>
-                        <i className="fas fa-times"></i>
-                      </button>
+                      
                     </li>
                   ))}
                 </ul>
@@ -150,7 +148,10 @@ const CodeEditor = () => {
                       editor.id === selectedEditorId ? "selected-editor" : ""
                     }`} // Apply conditional class
                   >
-                    Editor {editor.id}
+                    Editor {editor.id}&nbsp;&nbsp;
+                    <button onClick={() => handleDeleteEditor(editor.id)}>
+                        <i className="fas fa-times"></i>
+                      </button>
                   </li>
                 ))}
               </ul>
