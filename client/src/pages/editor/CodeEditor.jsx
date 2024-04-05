@@ -49,9 +49,10 @@ const CodeEditor = () => {
   };
 
   const handleResize = (e) => {
-    
     const newLeftPartitionWidth = `${(e.clientX / window.innerWidth) * 100}%`;
-    const newRightPartitionWidth = `${((window.innerWidth - e.clientX) / window.innerWidth) * 100}%`;
+    const newRightPartitionWidth = `${
+      ((window.innerWidth - e.clientX) / window.innerWidth) * 100
+    }%`;
 
     leftPartitionRef.current.style.width = newLeftPartitionWidth;
     rightPartitionRef.current.style.width = newRightPartitionWidth;
@@ -59,18 +60,20 @@ const CodeEditor = () => {
     // Add event listeners to handle mouse leaving window bounds or releasing mouse button
     document.addEventListener("mouseleave", stopResize);
     document.addEventListener("mouseup", stopResize);
-};
+  };
 
-const stopResize = () => {
+  const stopResize = () => {
     document.removeEventListener("mouseleave", stopResize);
     document.removeEventListener("mouseup", stopResize);
-};
+  };
 
   return (
     <div className="code-editor-page">
       <div className="navbar">
         <div className="user-info">User Name</div>
-        <button className="logout-button">Logout</button>
+        <button className="logout-button">
+          Logout&nbsp;&nbsp;<i className="fas fa-sign-out-alt"></i>
+        </button>
       </div>
       <div className="main-content">
         <div
@@ -98,7 +101,9 @@ const stopResize = () => {
             {selectedNav === "editors" && (
               <>
                 <h2>Open Editors</h2>
-                <button onClick={addEditor}>Add Editor</button>
+                <button onClick={addEditor}>
+                  <i className="fas fa-plus"></i>
+                </button>
                 <ul>
                   {editors.map((editor) => (
                     <li
@@ -110,7 +115,7 @@ const stopResize = () => {
                     >
                       Editor {editor.id}
                       <button onClick={() => handleDeleteEditor(editor.id)}>
-                        Delete
+                        <i className="fas fa-times"></i>
                       </button>
                     </li>
                   ))}
@@ -173,17 +178,22 @@ const stopResize = () => {
           </div>
         </div>
         <div className="output-block" ref={outputBlockRef}>
-          <div className="output-top">
-            <button>Run</button>
-            <button>Submit</button>
-          </div>
           <div className="output-area">
+            <p>OUTPUT</p>
             <textarea
               className="output-textarea"
               readOnly
               value={outputValue}
               placeholder="Output will appear here..."
             />
+          </div>
+          <div className="output-top">
+            <button>
+              Run&nbsp;&nbsp;<i className="fas fa-sync-alt"></i>
+            </button>
+            <button>
+              Submit&nbsp;&nbsp;<i className="fas fa-check"></i>
+            </button>
           </div>
         </div>
       </div>
