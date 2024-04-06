@@ -1,3 +1,11 @@
-/server/node_modules
-/server/.env
+#server --> api-gateway directory
+/server/api-gateway/node_modules
+/server/api-gateway/.env
+
+#server --> codeExecution directory
+/server/codeExecution/node_modules
+/server/codeExecution/.env
+
+#client folder
 /client/node_modules
+

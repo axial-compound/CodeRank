@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const USER = require("../../models/userModel");
-const CODE = require("../../models/codeModel");
+const USER = require("../../../models/userModel");
+const CODE = require("../../../models/codeModel");
 
 const crypto = require("crypto");
 
@@ -15,7 +15,7 @@ const {
   s3Client,
   GetObjectCommand,
   PutObjectCommand,
-} = require("../../config/awsConfig");
+} = require("../../../config/awsConfig");
 
 //------------------------------------------------------------XX create a unique key based on userid and codeBody  XX-----------------------------------------------------------
 const generateUniqueKey = async (userId, codeBody) => {

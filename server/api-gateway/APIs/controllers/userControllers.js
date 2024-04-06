@@ -1,6 +1,7 @@
 const express = require('express');
 const userServices = require('../services/userServices');
-const USER = require('../../models/userModel');
+const USER = require('../../../models/userModel');
+const axios = require( 'axios' );
 
 
 //------------------------------------------------------------XX Users List  XX-----------------------------------------------------------
@@ -13,7 +14,7 @@ const getUserList = async (req,res) =>{
     }
 };
 
-//------------------------------------------------------------XX Specific Code Controller  XX-----------------------------------------------------------
+//------------------------------------------------------------XX Get Specific Code Controller  XX-----------------------------------------------------------
 const getSpecificCodeByUser = async (req,res) =>{
     try {
 
@@ -36,9 +37,41 @@ const getAllCodesByUser = async (req,res) =>{
     res.json(codes);
 }
 
-const runUserCode = async (req,res) =>{
+const runUserCode = async (req, res) => {
+    try {
+        const { codeBody, language } = req.body;
 
-}
+        // Check if codeBody or language is missing
+        if (!codeBody || !language) {
+            return res.status(400).json({ error: "Code or language not provided" });
+        }
+
+        // Map language to compiler selection route
+        const compilerRoutes = {
+            javascript: '/run/javascript',
+            typescript: '/run/typescript',
+            python: '/run/python',
+            java: '/run/java',
+            cpp: '/run/cpp',
+            c: '/run/c'
+        };
+
+        // Check if the selected language is supported
+        if (!compilerRoutes[language]) {
+            return res.status(400).json({ error: "Unsupported language" });
+        }
+
+        // Forward the request to the appropriate route in codeExecutorApp.js
+        const response = await axios.post(`http://code-executor-service-hostname:8000${compilerRoutes[language]}`, {
+            codeBody
+        });
+
+        return res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error("Error running code:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
 
 //------------------------------------------------------------XX Submit User Code Controller XX-----------------------------------------------------------
 const submitUserCode = async (req,res) =>{
