@@ -1,6 +1,6 @@
 FROM node:lts-alpine3.19
-WORKDIR /server
-COPY . /server
+WORKDIR /server/api-gateway
+COPY . /server/api-gateway
 RUN npm install
 EXPOSE 3000
-CMD node app.js
+CMD node api-gatewayApp.js

@@ -15,15 +15,11 @@ app.post('/run/javascript', authCheck, codeController.runJavaScript);
 
 app.post('/run/typescript', authCheck, codeController.runTypeScript);
 
-
 app.post('/run/python', authCheck, codeController.runPython);
-
 
 app.post('/run/java', authCheck, codeController.runJava);
 
-
 app.post('/run/cpp', authCheck, codeController.runCpp);
-
 
 app.post('/run/c', authCheck, codeController.runC);
 
