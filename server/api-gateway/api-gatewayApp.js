@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 //mongodb client
-const {mongodbClient} = require('../config/mongodbConfig');
+const {mongodbClient} = require('./config/mongodbConfig');
 //aws client
-const {s3Client,ListBucketsCommand} = require('../config/awsConfig');
+const {s3Client,ListBucketsCommand} = require('./config/awsConfig');
 const userRoutes = require('./APIs/routes/userRoutes');
 const unAuthRoutes = require('./APIs/routes/unAuthRoutes');
-const authMiddlewarefunc = require('../middleware/authMiddleware');
+const authMiddlewarefunc = require('./middleware/authMiddleware');
 const app = express();
 
 require('dotenv').config();

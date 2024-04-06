@@ -1,0 +1,13 @@
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /compiler/python
+
+# Install essential build tools and dependencies for Python compilation
+RUN apt-get update && \
+    apt-get install -y \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set entry point to an interactive shell
+ENTRYPOINT ["/bin/bash"]

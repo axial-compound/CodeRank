@@ -10,18 +10,29 @@ require('dotenv').config();
 app.use(bodyParser.json());
 const port = 8000;
 
-
-app.post('/run/javascript', authCheck, codeController.runJavaScript);
-
-app.post('/run/typescript', authCheck, codeController.runTypeScript);
-
-app.post('/run/python', authCheck, codeController.runPython);
-
-app.post('/run/java', authCheck, codeController.runJava);
-
-app.post('/run/cpp', authCheck, codeController.runCpp);
-
-app.post('/run/c', authCheck, codeController.runC);
+// Dynamic route to handle language parameter
+app.post('/run/:language', authCheck, (req, res) => {
+    const { language } = req.params;
+    switch (language) {
+        case 'javascript':
+            codeController.runJavaScript(req, res);
+            break;
+        case 'typescript':
+            codeController.runTypeScript(req, res);
+            break;
+        case 'python':
+            codeController.runPython(req, res);
+            break;
+        case 'java':
+            codeController.runJava(req, res);
+            break;
+        case 'cpp':
+            codeController.runCpp(req, res);
+            break;
+        default:
+            res.status(400).json({ error: 'Unsupported language' });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Code-Executor server is running on Port ${port}`);
