@@ -1,5 +1,5 @@
 FROM node:lts-alpine3.19
-WORKDIR /codeexecutor/
+WORKDIR /app/server/codeExecution
 COPY . .
 RUN npm install
 EXPOSE 8000

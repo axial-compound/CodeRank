@@ -1,13 +1,7 @@
 FROM node:latest
 
 # Set the working directory
-WORKDIR /compiler/javascript
-
-# Install essential build tools and dependencies for JavaScript compilation
-RUN apt-get update && \
-    apt-get install -y \
-    npm \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app/server/nodejs-compiler
 
 # Set entry point to an interactive shell
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["bash"]

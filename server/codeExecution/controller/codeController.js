@@ -12,10 +12,10 @@ const getCode = async(req,res) => {
 
     const user = await codeService.runCodeBody(codeBody,language);
 
-    
 
+    return user;
   } catch (error) {
-    
+      res.status(500).json({msg:"Error Occured: ", error: error});
   }
 };
 

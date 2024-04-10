@@ -1,5 +1,5 @@
 FROM openjdk:latest
 
-WORKDIR /usr/src/app
+WORKDIR /app/server/java-compiler
 
 CMD ["bash"]

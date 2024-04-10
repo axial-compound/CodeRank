@@ -1,5 +1,5 @@
 FROM gcc:latest
 
-WORKDIR /usr/src/app
+WORKDIR /app/server/cpp-compiler
 
 CMD ["bash"]

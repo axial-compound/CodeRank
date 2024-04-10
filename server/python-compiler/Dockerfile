@@ -1,5 +1,5 @@
 FROM python:latest
 
-WORKDIR /usr/src/app
+WORKDIR /app/server/python-compiler
 
 CMD ["bash"]
