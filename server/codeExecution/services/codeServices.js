@@ -5,20 +5,42 @@ const runCodeBody = async (codeBody, language) => {
         let output = '';
         let error = '';
 
+        if (typeof(codeBody)!== 'string') {
+            throw new Error('Invalid input');
+        }
         // Define the docker run command based on the language
         let command;
+        let stdinData; // Variable to store the input data for stdin
         if (language === 'python') {
-            command = ['docker', 'run', '--rm', '-i', 'python-env', 'python', '-c', codeBody];
+            command = ['docker', 'run', '--rm', '-i', 'python-compiler', 'python', '-c', codeBody];
         } else if (language === 'cpp') {
-            command = ['docker', 'run', '--rm', '-i', 'cpp-env', 'sh', '-c', 'g++ -o my_cpp_program -xc++ - && ./my_cpp_program'];
+            command = ['docker', 'run', '--rm', '-i', 'cpp-compiler', 'sh', '-c', 'g++ -o my_cpp_program -xc++ - && ./my_cpp_program'];
+            stdinData = codeBody; // Set codeBody as the input data for stdin
         } else if (language === 'java') {
             command = ['docker', 'run', '--rm', '-i', 'java-env', 'sh', '-c', 'echo "$1" > Main.java && javac Main.java && java Main'];
+            stdinData = codeBody; // Set codeBody as the input data for stdin
         } else {
             throw new Error(`Unsupported language: ${language}`);
         }
 
         // Execute the docker run command
-        const child = spawn(command[0], command.slice(1), { shell: true });
+        const child = spawn(command[0], command.slice(1), { shell: true })
+        .on('error', (err) => {
+             console.error(`Error: ${err.message}`);
+         });
+
+        // Pass codeBody as input to stdin (if applicable)
+        if (stdinData) {
+            try {
+                child.stdin.write(stdinData)
+                   .on('error', (err) => {
+                        console.error(`Error writing to stdin: ${err.message}`);
+                    });
+                child.stdin.end();
+            } catch (error) {
+                console.error(`Error writing to stdin: ${error.message}`);
+            }
+        }
 
         // Handle stdout and stderr streams
         child.stdout.on('data', (data) => {
