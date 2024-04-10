@@ -33,7 +33,7 @@ const CodeEditor = () => {
     const existingNames = new Set(editors.map((editor) => editor.name));
 
     // If the entered name already exists, append a count until a unique name is found
-    let count = 1;
+    let count = 0;
     while (existingNames.has(editorName)) {
       editorName = `${newEditorName || `Editor ${newId}`} ${count}`;
       count++;
@@ -265,10 +265,10 @@ const CodeEditor = () => {
           </div>
           <div className="output-top">
             <button>
-              Run&nbsp;&nbsp;<i className="fas fa-sync-alt"></i>
+              Run<i className="fas fa-sync-alt"></i>
             </button>
             <button>
-              Submit&nbsp;&nbsp;<i className="fas fa-check"></i>
+              Submit<i className="fas fa-check"></i>
             </button>
           </div>
         </div>

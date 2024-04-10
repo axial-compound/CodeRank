@@ -83,7 +83,7 @@ const runUserCode = async (req, res) => {
 //------------------------------------------------------------XX Submit User Code Controller XX-----------------------------------------------------------
 const submitUserCode = async (req, res) => {
   try {
-    const { tag, description, codeBody, codeLanguage } = req.body;
+    const { tag,codeBody, codeLanguage } = req.body;
     const userID = req.user.id;
 
     if (!tag || !codeBody || !codeLanguage) {
