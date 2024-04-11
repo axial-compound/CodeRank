@@ -1,77 +1,82 @@
-const stream = require('stream');
 const Dockerode = require('dockerode');
 const docker = new Dockerode();
+
+const getDockerImage = (language) => {
+  switch (language) {
+    case 'python':
+      return 'python-compiler';
+    case 'cpp':
+      return 'cpp-compiler';
+    case 'java':
+      return 'java-compiler';
+    default:
+      throw new Error(`Unsupported language: ${language}`);
+  }
+};
 
 const runCode = async (req, res) => {
   try {
     const language = req.params.language;
-    const codeBody = req.body;
+    const codeBody = req.body.codeBody;
 
-    if (!codeBody ||!language) {
-      res.status(404).json({ message: "Language or Code Body is missing" });
+    if (!codeBody || !language) {
+      return res.status(400).json({ message: "Language or Code Body is missing" });
     }
 
-    let output = "";
-    let error = "";
+    console.log(codeBody, language);
 
-    const dockerImages = {
-      python: "python-compiler",
-      cpp: "cpp-compiler",
-      java: "java-env",
-    };
+    const image = getDockerImage(language);
 
-    const dockerCommands = {
-      python: ["python", "-c"],
-      cpp: ["sh", "-c", "g++ -o my_cpp_program -xc++ - &&./my_cpp_program"],
-      java: [
-        "sh",
-        "-c",
-        'echo "$1" > Main.java && javac Main.java && java Main',
-      ],
-    };
-
-    const image = dockerImages[language];
-    const command = dockerCommands[language];
-
-    const container = await docker.run(
-      image,
-      command,
-      { codeBody },
-      (process.stdin, process.stdout, process.stderr)
-    );
-
-    await new Promise((resolve, reject) => {
-      container.wait((err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
+    let container;
+    if (language === 'python') {
+      container = await docker.createContainer({
+        Image: image,
+        Tty: true,
+        AttachStdin: true,
+        Cmd: ['/bin/bash', '-c', `echo "${codeBody}" | ${language}`],
       });
+    } else if (language === 'cpp') {
+      container = await docker.createContainer({
+        Image: image,
+        Tty: true,
+        AttachStdin: true,
+        Cmd: ['/bin/bash', '-c', `echo "${codeBody.replace(/"/g, '\\"')}" > main.cpp && g++ -o main main.cpp && ./main`],
+      });
+    } else if (language === 'java') {
+      container = await docker.createContainer({
+        Image: image,
+        Tty: true,
+        AttachStdin: true,
+        Cmd: ['/bin/bash', '-c', `echo "${codeBody.replace(/"/g, '\\"')}" > Main.java && javac Main.java && java Main`],
+      });
+    }
+
+    await container.start();
+
+    const logs = await container.logs({
+      stdout: true,
+      stderr: true,
+      follow: true,
     });
 
-    const inspectData = await container.inspect();
+    let output = '';
 
-    output = inspectData.State.Running
-     ? "Code executed successfully"
-      : "Code execution failed";
+    logs.on('data', function (data) {
+      output += data; // Accumulate the output data
+      console.log(data);
+    });
 
-    if (inspectData.State.ExitCode!== 0) {
-      error = `Process exited with code ${inspectData.State.ExitCode}`;
-    }
+    await new Promise((resolve, reject) => {
+      logs.on('end', resolve);
+      logs.on('error', reject);
+    });
 
-    const timestamp = new Date().toISOString();
+    await container.remove();
 
-    const response_data = {
-      output: output,
-      error: error,
-      execution_info: `Code executed at ${timestamp}`,
-    };
-
-    return response_data;
+    res.status(200).json({ output }); // Send the output back in the response
   } catch (error) {
-    console.log("Error executing code", error);
-    throw error;
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
