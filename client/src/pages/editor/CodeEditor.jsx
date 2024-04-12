@@ -1,18 +1,23 @@
-import { useState,useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS, EXTENSIONS } from "../../constant";
-import {  useNavigate } from "react-router-dom";
-import {useSelector} from  'react-redux';
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import LanguageSelector from "../../components/languageSelector";
-//import {useDispatch} from  'react-redux';
-import "./CodeEditor.css"; 
+import { useDispatch } from "react-redux";
+import "./CodeEditor.css";
 import axios from "axios";
+import { logout } from "../../redux/actions/authAction";
 
 const CodeEditor = () => {
   const navigate = useNavigate();
-  //const dispatch = useDispatch();
-  const [isAuth, setIsAuth] = useState(useSelector((state) => state.auth.isAuthenticated));
-  const token = useSelector((state)=> state.auth.token);
+  const dispatch = useDispatch();
+  const [isAuth, setIsAuth] = useState(
+    useSelector((state) => state.auth.isAuthenticated)
+  );
+  const token = useSelector((state) => state.auth.token);
+  //const userId = useSelector((state) => state.auth.userId);
+  const [username] = useState(useSelector((state) => state.auth.username));
 
   //Check session token
   useEffect(() => {
@@ -33,13 +38,13 @@ const CodeEditor = () => {
   ]);
   const [selectedEditorId, setSelectedEditorId] = useState(1); // Initially select the first editor by its id
   const [selectedNav, setSelectedNav] = useState("editors");
-  const [outputValue] = useState("");
   const [newEditorName, setNewEditorName] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const leftPartitionRef = useRef(null);
   const rightPartitionRef = useRef(null);
   const outputBlockRef = useRef(null);
-  const [output , setOutput] =useState('');
+  const [output, setOutput] = useState("");
+  const [submissions, setSubmissions] = useState([]);
 
   const addEditor = () => {
     // Check if the user is authenticated
@@ -56,31 +61,30 @@ const CodeEditor = () => {
       }
     }
   };
-  
+
   const addNewEditor = () => {
     // Calculate the maximum id in the editors array
     let maxId = Math.max(...editors.map((editor) => editor.id));
     let newId;
 
-    if(!maxId){
+    if (!maxId) {
       newId = 1;
-    }else{
+    } else {
       newId = maxId + 1;
     }
-     
-  
+
     let editorName = newEditorName || `Editor ${newId}`;
-  
+
     // Create a set of existing editor names
     const existingNames = new Set(editors.map((editor) => editor.name));
-  
+
     // If the entered name already exists, append a count until a unique name is found
     let count = 0;
     while (existingNames.has(editorName)) {
       editorName = `${newEditorName || `Editor ${newId}`} ${count}`;
       count++;
     }
-  
+
     const newEditor = {
       id: newId,
       name: editorName,
@@ -89,7 +93,7 @@ const CodeEditor = () => {
     };
     setEditors([...editors, newEditor]);
     setSelectedEditorId(newId); // Set the newly added editor as selected
-  
+
     setNewEditorName(""); // Reset the new editor name input field
   };
 
@@ -123,36 +127,73 @@ const CodeEditor = () => {
     }
   };
 
-  const handleNavSelect = (nav) => {
+  const handleNavSelect = async (nav) => {
     setSelectedNav(nav);
+    let currentNav = selectedNav;
 
-    if(nav === "submissions"){
-      
+    if (currentNav === "submissions") {
+      //console.log(token);
+      const response = await axios.get("http://localhost:5000/user/codes", {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      setSubmissions(response.data);
     }
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    navigate("/");
-  }
+    dispatch(logout()); // Dispatch the logout action
+    navigate("/"); // Redirect to the home page after logout
+  };
 
   //Run click handler
 
-  const handleRunClick = async () =>{
+  const handleRunClick = async () => {
     let idOfEditor = selectedEditorId;
     let codeBody = editors[idOfEditor - 1].value;
     let language = editors[idOfEditor - 1].language;
-    
-    console.log(codeBody,language);
 
-    const response = await axios.post("http://localhost:8000/run", {language,codeBody},{
-      headers:{"Content-Type":"application/json",
-        "Authorization": `Bearer ${token}`}
-    });
+    //console.log(codeBody, language);
+
+    const response = await axios.post(
+      "http://localhost:8000/run",
+      { language, codeBody },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     setOutput(response.data.output);
-    
-  }
+  };
+
+  //codeSubmit handler
+  const handleCodeSubmit = async () => {
+    let idOfEditor = selectedEditorId;
+    let codeBody = editors[idOfEditor - 1].value;
+    let codeLanguage = editors[idOfEditor - 1].language;
+    let name = editors[idOfEditor - 1].name;
+
+    //console.log(name,codeBody,codeLanguage);
+
+    const response = await axios.post(
+      "http://localhost:5000/user/submit",
+      { name, codeBody, codeLanguage },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(response.status);
+  };
 
   const handleResize = (e) => {
     const newLeftPartitionWidth = `${(e.clientX / window.innerWidth) * 100}%`;
@@ -176,11 +217,15 @@ const CodeEditor = () => {
   return (
     <div className="code-editor-page">
       <div className="navbar">
-        <div className="user-info"> {isAuth ? sessionStorage.getItem("userName") : "CODERANK"}</div>
-        {isAuth && <button className="logout-button" onClick={handleLogout}>
-          Logout<i className="fas fa-sign-out-alt"></i>
-        </button>}
-        
+        <div className="user-info">
+          {" "}
+          {isAuth ? `Hello! ${username}` : "CODERANK"}
+        </div>
+        {isAuth && (
+          <button className="logout-button" onClick={handleLogout}>
+            Logout<i className="fas fa-sign-out-alt"></i>
+          </button>
+        )}
       </div>
       <div className="main-content">
         <div
@@ -208,13 +253,16 @@ const CodeEditor = () => {
               >
                 <i className="fas fa-file-alt"></i>
               </li>
-              {isAuth && <li
-                className={selectedNav === "submissions" ? "selected-tab" : ""}
-                onClick={() => handleNavSelect("submissions")}
-              >
-                <i className="fas fa-database"></i>
-              </li>}
-              
+              {isAuth && (
+                <li
+                  className={
+                    selectedNav === "submissions" ? "selected-tab" : ""
+                  }
+                  onClick={() => handleNavSelect("submissions")}
+                >
+                  <i className="fas fa-database"></i>
+                </li>
+              )}
             </ul>
           </div>
           <div className="file-section">
@@ -270,10 +318,15 @@ const CodeEditor = () => {
                 </div> */}
               </>
             )}
+
             {selectedNav === "submissions" && (
               <>
                 <h2>Submissions</h2>
-                {/* Render submissions list here */}
+                <ul>
+                  {submissions.map((submission, index) => (
+                    <li key={index}>{submission.name}</li>
+                  ))}
+                </ul>
               </>
             )}
           </div>
@@ -338,10 +391,11 @@ const CodeEditor = () => {
             <button onClick={handleRunClick}>
               Run<i className="fas fa-sync-alt"></i>
             </button>
-            {isAuth && <button>
-              Submit<i className="fas fa-check"></i>
-            </button>}
-            
+            {isAuth && (
+              <button onClick={handleCodeSubmit}>
+                Submit<i className="fas fa-check"></i>
+              </button>
+            )}
           </div>
         </div>
       </div>

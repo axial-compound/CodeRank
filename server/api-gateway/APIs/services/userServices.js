@@ -81,7 +81,7 @@ const getusers = async (id) => {
 };
 
 //------------------------------------------------------------XX Code Submit  XX-----------------------------------------------------------
-const codeSubmit = async (tag, description, codeBody, codeLanguage, userId) => {
+const codeSubmit = async (name, codeBody, codeLanguage, userId) => {
   try {
     const uniqueKey = await generateUniqueKey(userId, codeBody);
 
@@ -98,7 +98,7 @@ const codeSubmit = async (tag, description, codeBody, codeLanguage, userId) => {
     if (existingCode) {
       return {
         msg: "Code Exists",
-        tag: existingCode.tag,
+        name: existingCode.name,
         link: existingCode.codeBodyURL,
       };
     } else {
@@ -111,8 +111,7 @@ const codeSubmit = async (tag, description, codeBody, codeLanguage, userId) => {
       await s3Client.send(new PutObjectCommand(putObjectParams));
 
       const newCode = new CODE({
-        tag: tag,
-        description: description,
+        name: name,
         codeBodyURL: codeurl,
         codeLanguage: codeLanguage,
         userReference: userId,
@@ -131,9 +130,10 @@ const codeSubmit = async (tag, description, codeBody, codeLanguage, userId) => {
 
 const getUserCodes = async (userId) => {
   try {
-    // If only userId is provided, fetch all codes by user and return their tags in JSON format
     const codes = await CODE.find({ userReference: userId });
-    return codes.map((code) => ({ tag: code.tag }));
+
+    return codes.map((code) => ({ name: code.name }));
+    
   } catch (error) {
     throw new Error("Error fetching codes by user");
   }

@@ -6,20 +6,20 @@ const secret_key = process.env.SECRET_KEY;
 
 const authMiddlewarefunc = (req,res,next) =>{
     //Extract the token from the req
-    const token = req.headers['authorization'];
+    const token = req.headers.authorization;
 
     if(!token){
         return res.status(401).json({message: 'No token provied'});
     }
 
     //verify the token
-    jwt.verify(token,secret_key, (err,decode) =>{
-        if(err){
-            return res.send(403).json({message: "Authentication failed"});
+    jwt.verify(token.replace('Bearer ', ''), secret_key, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ message: 'Unauthorized: Invalid token' });
         }
 
         //store user information in req for further use
-        req.user = decode;
+        req.user = decoded;
 
         //call next callback function
         next();

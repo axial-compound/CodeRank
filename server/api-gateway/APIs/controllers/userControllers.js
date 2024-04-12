@@ -83,22 +83,21 @@ const runUserCode = async (req, res) => {
 //------------------------------------------------------------XX Submit User Code Controller XX-----------------------------------------------------------
 const submitUserCode = async (req, res) => {
   try {
-    const { tag,codeBody, codeLanguage } = req.body;
+    const {name,codeBody, codeLanguage } = req.body;
     const userID = req.user.id;
 
-    if (!tag || !codeBody || !codeLanguage) {
+    if (!name || !codeBody || !codeLanguage) {
       res.send("Please provide all the details");
     }
 
     const newCode = await userServices.codeSubmit(
-      tag,
-      description,
+      name,
       codeBody,
       codeLanguage,
       userID
     );
 
-    res.json({ message: "code Submitted succesfully", code: newCode });
+    res.json({ message: "code Submitted succesfully", code: newCode.name });
   } catch (error) {
     console.log(error);
     res.status(404).json({ msg: error.message });

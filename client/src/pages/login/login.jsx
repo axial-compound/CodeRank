@@ -28,8 +28,9 @@ const Login = () => {
         throw new Error("Login failed");
       }
 
-      const { username, token } = response.data;
-      dispatch(loginSuccess(username, token));
+      const { userId , username, token } = response.data;
+      //console.log(username);
+      dispatch(loginSuccess(userId ,username,token));
   
 
       navigate("/editor");

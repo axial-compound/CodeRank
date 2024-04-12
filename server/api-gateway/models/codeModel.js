@@ -1,12 +1,9 @@
 const mongoose = require("mongoose");
 
 const codeSchema = new mongoose.Schema({
-  tag: {
+  name: {
     type: String,
     required: true,
-  },
-  description: {
-    type: String
   },
   codeBodyURL: {
     type: String,

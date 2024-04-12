@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import "./home.css";
 
 const Home = () => {
@@ -5,9 +6,13 @@ const Home = () => {
     <div className="home">
       <h1>Welcome to CodeRank</h1>
       <h4>Your Cloud Code Editor</h4>
-      <button className="sign-in">Sign in</button>
+      <NavLink to={"/login"}>
+      <button className="sign-in">Login</button>
+      </NavLink>
       <div>
-        <button className="continue-as-guest">Continue as Guest</button>
+        <NavLink to={"/editor"}>
+        <button className="continue-as-guest">Continue as  Guest</button>
+        </NavLink>
       </div>
     </div>
   );
