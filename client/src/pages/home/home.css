@@ -1,0 +1,87 @@
+.home {
+    background-image: url('../../assets/coderankbg.jpeg');
+    background-color:  rgba(64, 10, 92, 1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Set the height to cover the entire viewport */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Additional styling for the content */
+  .home h1 {
+    color: white;
+    font-size: 3rem;
+    font-family: monospace;
+  }
+  
+  .home h4 {
+    color: white;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    font-family: monospace;
+  }
+  
+  .sign-in {
+    margin-top: 2rem;
+    padding: 0.5rem 1.5rem;
+    background: linear-gradient(135deg, #7f07a4, #c43a8b); /* Purplish gradient */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: medium;
+    border: 1px solid transparent;
+  }  
+
+  .continue-as-guest::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    border-radius: 20px;
+    background-color: black;
+    z-index: -1;
+  }
+
+  .continue-as-guest::after {
+    content: attr(data);
+    font-size: 16px;
+    background: linear-gradient(to left, #00FFA3, #7f07a4);
+    color: transparent;
+    transition: 200ms
+  }
+
+  .continue-as-guest {
+    margin-top: 2rem;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    outline: none;
+    position: relative;
+    border-radius: 20px;
+    background: linear-gradient(to right, #00FFA3, #7f07a4);
+    cursor: pointer;
+    z-index: 1;
+    color: aliceblue;
+    font-size: medium;
+  }
+
+  .continue-as-guest:hover::before {
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
+  .continue-as-guest:hover::after{
+    color: white;
+  }
+  
+  .sign-in:hover {
+    border: 1px solid white;
+  }

@@ -39,6 +39,7 @@ const CodeEditor = () => {
   const leftPartitionRef = useRef(null);
   const rightPartitionRef = useRef(null);
   const outputBlockRef = useRef(null);
+  const [output , setOutput] =useState('');
 
   const addEditor = () => {
     // Check if the user is authenticated
@@ -124,6 +125,10 @@ const CodeEditor = () => {
 
   const handleNavSelect = (nav) => {
     setSelectedNav(nav);
+
+    if(nav === "submissions"){
+      
+    }
   };
 
   const handleLogout = () => {
@@ -136,15 +141,17 @@ const CodeEditor = () => {
   const handleRunClick = async () =>{
     let idOfEditor = selectedEditorId;
     let codeBody = editors[idOfEditor - 1].value;
-    let lang = editors[idOfEditor -1].language;
-    const token = "Auth user token here";
+    let language = editors[idOfEditor - 1].language;
     
-    const response = await axios.post("http://localhost:8000/run", {codeBody,lang},{
+    console.log(codeBody,language);
+
+    const response = await axios.post("http://localhost:8000/run", {language,codeBody},{
       headers:{"Content-Type":"application/json",
         "Authorization": `Bearer ${token}`}
     });
 
-    console.log(response);
+    setOutput(response.data.output);
+    
   }
 
   const handleResize = (e) => {
@@ -323,7 +330,7 @@ const CodeEditor = () => {
             <textarea
               className="output-textarea"
               readOnly
-              value={outputValue}
+              value={output}
               placeholder="Output will appear here..."
             />
           </div>

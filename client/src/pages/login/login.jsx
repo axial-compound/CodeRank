@@ -9,7 +9,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [avi,setAvi] =useState('gadhi');
 
   const handleSubmit = async (e) => {
     e.preventDefault();

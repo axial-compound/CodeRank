@@ -71,9 +71,11 @@ const runCode = async (req, res) => {
       logs.on('error', reject);
     });
 
+   
+
     await container.remove();
 
-    res.status(200).json({ output }); // Send the output back in the response
+    res.status(200).json({ output }); 
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal server error" });
