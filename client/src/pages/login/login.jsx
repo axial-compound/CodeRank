@@ -70,6 +70,11 @@ const Login = () => {
           Login
         </button>
         <p>Create Account:-<NavLink to={"/register"}><a >Register Here</a></NavLink></p>
+        <NavLink to={"/"}>
+        <button type="button" style={{background: "grey"}}>
+          Return to home
+        </button>
+        </NavLink>
       </form>
     </div>
   );

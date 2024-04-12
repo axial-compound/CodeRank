@@ -50,6 +50,11 @@ const Register = () => {
         </div>
         <button type="submit">Register</button>
         <p>Already Have Account:-<NavLink to={"/login"}><a >Login Here</a></NavLink></p>
+        <NavLink to={"/"}>
+        <button type="button" style={{background: "grey"}}>
+          Return to Home
+        </button>
+        </NavLink>
       </form>
     </div>
   );

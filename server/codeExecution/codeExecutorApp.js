@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const authCheck = require("./middleware/authCheckMiddleware");
 const routes = require("./routes/routes");
+const unAuthRoutes = require("./routes/unAuthRoutes");
 const cors = require('cors');
 const app = express();
 
@@ -22,7 +23,8 @@ app.use(cors(corsOptions));
 const port = 8000;
 
 // routes
-app.use("/", authCheck, routes);
+app.use("/user", authCheck, routes);
+app.use("/",unAuthRoutes);
 
 app.listen(port, () => {
   console.log(`Code-Executor server is running on Port ${port}`);

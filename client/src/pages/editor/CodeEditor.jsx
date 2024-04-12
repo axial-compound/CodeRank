@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS, EXTENSIONS } from "../../constant";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LanguageSelector from "../../components/languageSelector";
 import { useDispatch } from "react-redux";
@@ -149,9 +149,8 @@ const CodeEditor = () => {
     navigate("/"); // Redirect to the home page after logout
   };
 
-  //Run click handler
-
-  const handleRunClick = async () => {
+  //run click handler of unAuth user
+  const handleRunClickUnAuth = async () => {
     let idOfEditor = selectedEditorId;
     let codeBody = editors[idOfEditor - 1].value;
     let language = editors[idOfEditor - 1].language;
@@ -160,6 +159,29 @@ const CodeEditor = () => {
 
     const response = await axios.post(
       "http://localhost:8000/run",
+      { language, codeBody },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setOutput(response.data.output);
+  };
+
+  //Run click handler of auth user
+
+  const handleRunClickAuth = async () => {
+    let idOfEditor = selectedEditorId;
+    let codeBody = editors[idOfEditor - 1].value;
+    let language = editors[idOfEditor - 1].language;
+
+    //console.log(codeBody, language);
+
+    const response = await axios.post(
+      "http://localhost:8000/user/run",
       { language, codeBody },
       {
         headers: {
@@ -221,10 +243,16 @@ const CodeEditor = () => {
           {" "}
           {isAuth ? `Hello! ${username}` : "CODERANK"}
         </div>
-        {isAuth && (
+        {isAuth ? (
           <button className="logout-button" onClick={handleLogout}>
             Logout<i className="fas fa-sign-out-alt"></i>
           </button>
+        ) : (
+          <NavLink to={"/login"}>
+            <button className="logout-button" onClick={handleLogout}>
+              Login<i className="fas fa-sign-in-alt"></i>
+            </button>
+          </NavLink>
         )}
       </div>
       <div className="main-content">
@@ -307,15 +335,6 @@ const CodeEditor = () => {
                     </li>
                   ))}
                 </ul>
-
-                {/* <div className="submit-all">
-                  <button
-                    className="submit-all-button"
-                    // onClick={handleSubmitAll}
-                  >
-                    Submit All
-                  </button>
-                </div> */}
               </>
             )}
 
@@ -388,9 +407,16 @@ const CodeEditor = () => {
             />
           </div>
           <div className="output-top">
-            <button onClick={handleRunClick}>
-              Run<i className="fas fa-sync-alt"></i>
-            </button>
+            {isAuth ? (
+              <button onClick={handleRunClickAuth}>
+                Run<i className="fas fa-sync-alt"></i>
+              </button>
+            ) : (
+              <button onClick={handleRunClickUnAuth}>
+                Run<i className="fas fa-check"></i>
+              </button>
+            )}
+
             {isAuth && (
               <button onClick={handleCodeSubmit}>
                 Submit<i className="fas fa-check"></i>
