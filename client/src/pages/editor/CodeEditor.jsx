@@ -2,6 +2,7 @@ import { useState,useEffect, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS, EXTENSIONS } from "../../constant";
 import {  useNavigate } from "react-router-dom";
+import {useSelector} from  'react-redux';
 import LanguageSelector from "../../components/languageSelector";
 //import {useDispatch} from  'react-redux';
 import "./CodeEditor.css"; 
@@ -10,8 +11,8 @@ import axios from "axios";
 const CodeEditor = () => {
   const navigate = useNavigate();
   //const dispatch = useDispatch();
-  const [isAuth, setIsAuth] = useState(false);
-  const token = sessionStorage.getItem("token");
+  const [isAuth, setIsAuth] = useState(useSelector((state) => state.auth.isAuthenticated));
+  const token = useSelector((state)=> state.auth.token);
 
   //Check session token
   useEffect(() => {
@@ -59,7 +60,7 @@ const CodeEditor = () => {
     // Calculate the maximum id in the editors array
     let maxId = Math.max(...editors.map((editor) => editor.id));
     let newId;
-    
+
     if(!maxId){
       newId = 1;
     }else{

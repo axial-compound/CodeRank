@@ -30,7 +30,7 @@ const Login = () => {
 
       const { username, token } = response.data;
       dispatch(loginSuccess(username, token));
-      sessionStorage.setItem('token', token);
+  
 
       navigate("/editor");
     } catch (error) {
