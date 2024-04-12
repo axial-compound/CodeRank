@@ -18,7 +18,11 @@ const register = async (req,res) =>{
         }
 
         const newuser = await userServices.registerUser(email, name, password);
-
+        
+        if(newuser.existingUser){
+            res.status(201).json({msg: 'User already exists'});
+        }
+        
         res.status(200).json({message: 'User created successfully', user : newuser})
         
     } catch (error) {
@@ -39,7 +43,7 @@ const login = async (req,res) =>{
 
         const token = jwt.sign({id: user._id},secret_key,{expiresIn: '1d'});
 
-        res.status(200).json({message:'User Logged in Succesfully', user:user.name,token});
+        res.status(200).json({message:'User Logged in Succesfully', username:user.name,token});
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');

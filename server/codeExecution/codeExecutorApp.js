@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 const port = 8000;
 
 // routes
-app.use("/run",authCheck,routes);
+app.use("/",authCheck,routes);
 
 app.listen(port, () => {
     console.log(`Code-Executor server is running on Port ${port}`);

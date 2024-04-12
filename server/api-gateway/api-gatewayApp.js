@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const {mongodbClient} = require('./config/mongodbConfig');
 //aws client
 const {s3Client,ListBucketsCommand} = require('./config/awsConfig');
+const cors = require("cors");
 const userRoutes = require('./APIs/routes/userRoutes');
 const unAuthRoutes = require('./APIs/routes/unAuthRoutes');
 const authMiddlewarefunc = require('./middleware/authMiddleware');
@@ -13,7 +14,17 @@ require('dotenv').config();
 
 //app.use(express.json()); // for parsing application/json
 app.use(bodyParser.json());
-const port = 3000;
+
+//cors option
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  };
+  
+  app.use(cors(corsOptions));
+
+const port = 5000;
 
 //routes
 app.use('/user',authMiddlewarefunc,userRoutes);

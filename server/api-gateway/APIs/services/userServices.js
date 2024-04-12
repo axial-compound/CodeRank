@@ -34,7 +34,7 @@ const registerUser = async (email, name, password) => {
     const existingUser = await USER.findOne({ email });
     if (existingUser) {
       console.log("Email already exists");
-      return; // Exit the function early if email already exists
+      throw new Error("Email already exists");
     }
 
     // Hash the password before storing it in the database

@@ -2,9 +2,12 @@ import { useState, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS, EXTENSIONS } from "../../constant";
 import LanguageSelector from "../../components/languageSelector";
-import "./CodeEditor.css"; // Import the CSS file for styling
+//import {useDispatch} from  'react-redux';
+import "./CodeEditor.css"; 
+import axios from "axios";
 
 const CodeEditor = () => {
+  //const dispatch = useDispatch();
   const [editors, setEditors] = useState([
     {
       id: 1,
@@ -84,6 +87,22 @@ const CodeEditor = () => {
   const handleNavSelect = (nav) => {
     setSelectedNav(nav);
   };
+
+  //Run click handler
+
+  const handleRunClick = async () =>{
+    let idOfEditor = selectedEditorId;
+    let codeBody = editors[idOfEditor - 1].value;
+    let lang = editors[idOfEditor -1].language;
+    const token = "Auth user token here";
+    
+    const response = await axios.post("http://localhost:8000/run", {codeBody,lang},{
+      headers:{"Content-Type":"application/json",
+        "Authorization": `Bearer ${token}`}
+    });
+
+    console.log(response);
+  }
 
   const handleResize = (e) => {
     const newLeftPartitionWidth = `${(e.clientX / window.innerWidth) * 100}%`;
@@ -264,7 +283,7 @@ const CodeEditor = () => {
             />
           </div>
           <div className="output-top">
-            <button>
+            <button onClick={handleRunClick}>
               Run<i className="fas fa-sync-alt"></i>
             </button>
             <button>

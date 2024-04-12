@@ -1,4 +1,6 @@
 import { Routes, Route} from "react-router-dom";
+import { Provider} from  'react-redux';
+import store from "./redux/store";
 import Login from "./pages/login/login";
 import './App.css'
 import Register from "./pages/login/register";
@@ -9,6 +11,7 @@ function App() {
 
   return (
     <>
+    <Provider store={store}>
       <div className="app">
         <Routes>
           <Route path="/" element={"welcome to Online Code Editor"}/>
@@ -18,6 +21,7 @@ function App() {
 
         </Routes>
       </div>
+      </Provider>
     </>
   )
 }

@@ -16,14 +16,14 @@ const getDockerImage = (language) => {
 
 const runCode = async (req, res) => {
   try {
-    const language = req.params.language;
+    const language = req.body.language;
     const codeBody = req.body.codeBody;
 
     if (!codeBody || !language) {
       return res.status(400).json({ message: "Language or Code Body is missing" });
     }
 
-    console.log(codeBody, language);
+    //console.log(codeBody, language);
 
     const image = getDockerImage(language);
 
@@ -63,7 +63,7 @@ const runCode = async (req, res) => {
 
     logs.on('data', function (data) {
       output += data; // Accumulate the output data
-      console.log(data);
+      //console.log(data);
     });
 
     await new Promise((resolve, reject) => {
