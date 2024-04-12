@@ -1,13 +1,27 @@
-import { useState, useRef } from "react";
+import { useState,useEffect, useRef } from "react";
 import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS, EXTENSIONS } from "../../constant";
+import {  useNavigate } from "react-router-dom";
 import LanguageSelector from "../../components/languageSelector";
 //import {useDispatch} from  'react-redux';
 import "./CodeEditor.css"; 
 import axios from "axios";
 
 const CodeEditor = () => {
+  const navigate = useNavigate();
   //const dispatch = useDispatch();
+  const [isAuth, setIsAuth] = useState(false);
+  const token = sessionStorage.getItem("token");
+
+  //Check session token
+  useEffect(() => {
+    if (token) {
+      setIsAuth(true);
+    }
+  }, [token]);
+
+  //console.log(isAuth);
+
   const [editors, setEditors] = useState([
     {
       id: 1,
@@ -26,22 +40,45 @@ const CodeEditor = () => {
   const outputBlockRef = useRef(null);
 
   const addEditor = () => {
+    // Check if the user is authenticated
+    if (isAuth) {
+      // If authenticated, allow adding editors without restriction
+      addNewEditor();
+    } else {
+      // If not authenticated, limit the number of editors to two
+      if (editors.length < 2) {
+        addNewEditor();
+      } else {
+        // Display a message or take appropriate action when the limit is reached
+        alert("You can only add two editors as a guest.");
+      }
+    }
+  };
+  
+  const addNewEditor = () => {
     // Calculate the maximum id in the editors array
-    const maxId = Math.max(...editors.map((editor) => editor.id));
-    const newId = maxId + 1;
-
+    let maxId = Math.max(...editors.map((editor) => editor.id));
+    let newId;
+    
+    if(!maxId){
+      newId = 1;
+    }else{
+      newId = maxId + 1;
+    }
+     
+  
     let editorName = newEditorName || `Editor ${newId}`;
-
+  
     // Create a set of existing editor names
     const existingNames = new Set(editors.map((editor) => editor.name));
-
+  
     // If the entered name already exists, append a count until a unique name is found
     let count = 0;
     while (existingNames.has(editorName)) {
       editorName = `${newEditorName || `Editor ${newId}`} ${count}`;
       count++;
     }
-
+  
     const newEditor = {
       id: newId,
       name: editorName,
@@ -50,7 +87,7 @@ const CodeEditor = () => {
     };
     setEditors([...editors, newEditor]);
     setSelectedEditorId(newId); // Set the newly added editor as selected
-
+  
     setNewEditorName(""); // Reset the new editor name input field
   };
 
@@ -87,6 +124,11 @@ const CodeEditor = () => {
   const handleNavSelect = (nav) => {
     setSelectedNav(nav);
   };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    navigate("/");
+  }
 
   //Run click handler
 
@@ -126,10 +168,11 @@ const CodeEditor = () => {
   return (
     <div className="code-editor-page">
       <div className="navbar">
-        <div className="user-info">User Name</div>
-        <button className="logout-button">
-          Logout&nbsp;&nbsp;<i className="fas fa-sign-out-alt"></i>
-        </button>
+        <div className="user-info"> {isAuth ? sessionStorage.getItem("userName") : "CODERANK"}</div>
+        {isAuth && <button className="logout-button" onClick={handleLogout}>
+          Logout<i className="fas fa-sign-out-alt"></i>
+        </button>}
+        
       </div>
       <div className="main-content">
         <div
@@ -157,12 +200,13 @@ const CodeEditor = () => {
               >
                 <i className="fas fa-file-alt"></i>
               </li>
-              <li
+              {isAuth && <li
                 className={selectedNav === "submissions" ? "selected-tab" : ""}
                 onClick={() => handleNavSelect("submissions")}
               >
                 <i className="fas fa-database"></i>
-              </li>
+              </li>}
+              
             </ul>
           </div>
           <div className="file-section">
@@ -208,14 +252,14 @@ const CodeEditor = () => {
                   ))}
                 </ul>
 
-                <div className="submit-all">
+                {/* <div className="submit-all">
                   <button
                     className="submit-all-button"
                     // onClick={handleSubmitAll}
                   >
                     Submit All
                   </button>
-                </div>
+                </div> */}
               </>
             )}
             {selectedNav === "submissions" && (
@@ -286,9 +330,10 @@ const CodeEditor = () => {
             <button onClick={handleRunClick}>
               Run<i className="fas fa-sync-alt"></i>
             </button>
-            <button>
+            {isAuth && <button>
               Submit<i className="fas fa-check"></i>
-            </button>
+            </button>}
+            
           </div>
         </div>
       </div>
