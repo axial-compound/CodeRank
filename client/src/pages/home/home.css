@@ -4,6 +4,13 @@
   50% { opacity: 1; }
 }
 
+.editor-animation {
+  display: inline;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: fadeInOut 3s infinite;
+}
+
 /* Additional styling for the content */
 .home {
   background-image: url('../../assets/coderankbg.jpeg');
@@ -25,15 +32,11 @@
   font-family: monospace;
 }
 
-.home h1 .code-animation {
-  animation: fadeInOut 3s infinite ; /* Adjust duration and steps as needed */
-}
-
 .home h4 {
   color: white;
   font-size: 1.5rem;
   margin-top: 1rem;
-  font-family: monospace;
+  font-family: 'Courier New', Courier, monospace;
   animation: fadeInOut 3s infinite; /* Adjust duration as needed */
 }
 
@@ -100,7 +103,7 @@
 
 /* Animated btn glow on hover */
 .glow-on-hover {
-  width: 220px;
+  width: 200px;
   height: 50px;
   border: none;
   outline: none;
@@ -109,7 +112,8 @@
   cursor: pointer;
   position: relative;
   z-index: 0;
-  border-radius: 10px;
+  border-radius: 30px;
+  font-size: medium;
 }
 
 .glow-on-hover:before {
@@ -126,7 +130,7 @@
   animation: glowing 20s linear infinite;
   opacity: 0;
   transition: opacity .3s ease-in-out;
-  border-radius: 10px;
+  border-radius: 30px;
 }
 
 .glow-on-hover:active {
@@ -150,7 +154,7 @@
   background: linear-gradient(135deg, #7f07a4, #c43a8b);
   left: 0;
   top: 0;
-  border-radius: 10px;
+  border-radius: 30px;
 }
 
 @keyframes glowing {
