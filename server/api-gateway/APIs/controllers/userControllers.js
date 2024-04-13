@@ -25,6 +25,29 @@ const getSpecificCodeByUser = async (req, res) => {
   }
 };
 
+//------------------------------------------------------------XX Get Specific Code from S3 bucket  XX-----------------------------------------------------------
+
+const getS3CodeBody = async (req,res) => {
+
+    const url = req.body.url;
+
+    try {
+      const code = await userServices.s3CodeBody(url);
+
+      if(!code){
+        res.status(404).send("no codeBody found");
+      }
+
+      return res.json(code);
+    } catch (error) {
+        return res.status(500).send('Internal server error at s3getCode!');
+    }
+    
+
+
+}
+
+
 //------------------------------------------------------------XX All codes of user Controller  XX-----------------------------------------------------------
 const getAllCodesByUser = async (req, res) => {
   const userId = req.user.id;
@@ -110,4 +133,5 @@ module.exports = {
   getSpecificCodeByUser,
   submitUserCode,
   runUserCode,
+  getS3CodeBody,
 };

@@ -126,13 +126,38 @@ const codeSubmit = async (name, codeBody, codeLanguage, userId) => {
   }
 };
 
+//------------------------------------------------------------XX  S3 codeBody of specific codeUrl  XX-----------------------------------------------------------
+
+const s3CodeBody = async (url) => {
+  try {
+    // Extract the key from the URL
+    const key = url.split(aws_url)[1]; // Assuming aws_url is the base URL of your S3 bucket
+
+    // Construct the parameters for the getObject operation
+    const getObjectParams = {
+      Bucket: "coderank-codes", // Your S3 bucket name
+      Key: key, // The key (filename) of the object
+    };
+
+    // Retrieve the object from S3
+    const data = await s3Client.send(new GetObjectCommand(getObjectParams));
+
+    // Extract and return the code body from the response
+    const codeBody = data.Body.toString();
+    return codeBody;
+  } catch (error) {
+    throw new Error("Error fetching code body from S3");
+  }
+};
+
+
 //------------------------------------------------------------XX  all codes of user  XX-----------------------------------------------------------
 
 const getUserCodes = async (userId) => {
   try {
     const codes = await CODE.find({ userReference: userId });
 
-    return codes.map((code) => ({ name: code.name }));
+    return codes.map((code) => ({ name: code.name,codeBodyURL: code.codeBodyURL,language: code.codeLanguage }));
     
   } catch (error) {
     throw new Error("Error fetching codes by user");
@@ -161,5 +186,6 @@ module.exports = {
   getUserCodes,
   codeSubmit,
   getSpecificCode,
+  s3CodeBody
 };
 

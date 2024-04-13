@@ -133,9 +133,51 @@ const CodeEditor = () => {
         },
       });
 
+      //console.log(response.data);
       setSubmissions(response.data);
     }
   };
+
+  //handle submission select 
+
+  
+  // const handleSubmissionSelect = async(submission) => {
+  //   const maxEditorId = Math.max(...editors.map((editor) => editor.id), 0) + 1;
+  //   const url = submission.codeBodyURL;
+  //   const code = await axios.get("http://localhost:5000/user/s3code", {url}, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //   setSelectedEditorId(maxEditorId);
+  //   setEditors([
+  //     ...editors,
+  //     {
+  //       id: maxEditorId,
+  //       name: submission.name,
+  //       value: code, // Assuming submission object has value and language properties
+  //       language: submission.codeLanguage,
+  //     },
+  //   ]);
+  // };
+
+
+  const handleSubmissionSelect = async(submission) => {
+    const maxEditorId = Math.max(...editors.map((editor) => editor.id), 0) + 1;
+    //console.log(submission.codeBodyURL);
+    setSelectedEditorId(maxEditorId);
+    setEditors([
+      ...editors,
+      {
+        id: maxEditorId,
+        name: submission.name,
+        value: submission.codeBody, // Assuming submission object has value and language properties
+        language: submission.codeLanguage,
+      },
+    ]);
+  };
+  
 
   const handleLogout = () => {
     dispatch(logout()); // Dispatch the logout action
@@ -309,7 +351,13 @@ const CodeEditor = () => {
                 <h2>Submissions</h2>
                 <ul>
                   {submissions.map((submission, index) => (
-                    <li key={index}>{submission.name}</li>
+                     <li
+                     key={index}
+                     onClick={() => handleSubmissionSelect(submission)}
+                     className={`opened-editor ${
+                       submission.id === selectedEditorId ? "selected-editor" : ""
+                     }`}
+                   >{submission.name}</li>
                   ))}
                 </ul>
               </>
