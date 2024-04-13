@@ -1,17 +1,24 @@
-import { NavLink } from "react-router-dom";
-import "./home.css";
+import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import './home.css';
 
 const Home = () => {
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
+
   return (
-    <div className="home">
+    <div className={`home ${animate ? 'animate' : ''}`}>
       <h1>Welcome to CodeRank</h1>
       <h4>Your Cloud Code Editor</h4>
-      <NavLink to={"/login"}>
-      <button className="sign-in">Login</button>
+      <NavLink to="/login">
+        <button className="glow-on-hover" type="button">Login To Continue</button>
       </NavLink>
       <div>
-        <NavLink to={"/editor"}>
-        <button className="continue-as-guest">Continue as  Guest</button>
+        <NavLink to="/editor">
+          <button className="continue-as-guest">Continue as Guest</button>
         </NavLink>
       </div>
     </div>
