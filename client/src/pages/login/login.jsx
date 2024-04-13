@@ -28,10 +28,9 @@ const Login = () => {
         throw new Error("Login failed");
       }
 
-      const { userId , username, token } = response.data;
+      const { userId, username, token } = response.data;
       //console.log(username);
-      dispatch(loginSuccess(userId ,username,token));
-  
+      dispatch(loginSuccess(userId, username, token));
 
       navigate("/editor");
     } catch (error) {
@@ -69,11 +68,16 @@ const Login = () => {
         <button type="button" onClick={handleSubmit}>
           Login
         </button>
-        <p>Create Account:-<NavLink to={"/register"}><a >Register Here</a></NavLink></p>
+        <p>
+          Don&apos;t have an account? &nbsp;
+          <NavLink className="link" to={"/register"}>
+            <a>Register Here</a>
+          </NavLink>
+        </p>
         <NavLink to={"/"}>
-        <button type="button" style={{background: "grey"}}>
-          Return to home
-        </button>
+          <button type="button" style={{ background: "grey" }}>
+            Return to home
+          </button>
         </NavLink>
       </form>
     </div>

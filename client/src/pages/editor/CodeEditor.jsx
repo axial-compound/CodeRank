@@ -47,18 +47,10 @@ const CodeEditor = () => {
   const [submissions, setSubmissions] = useState([]);
 
   const addEditor = () => {
-    // Check if the user is authenticated
-    if (isAuth) {
-      // If authenticated, allow adding editors without restriction
+    if (isAuth || editors.length < 2) {
       addNewEditor();
     } else {
-      // If not authenticated, limit the number of editors to two
-      if (editors.length < 2) {
-        addNewEditor();
-      } else {
-        // Display a message or take appropriate action when the limit is reached
-        alert("You can only add two editors as a guest.");
-      }
+      alert("You can only add two editors as a guest.");
     }
   };
 
@@ -126,6 +118,7 @@ const CodeEditor = () => {
       );
     }
   };
+  
 
   const handleNavSelect = async (nav) => {
     setSelectedNav(nav);
@@ -151,69 +144,42 @@ const CodeEditor = () => {
 
   //run click handler of unAuth user
   const handleRunClickUnAuth = async () => {
-    let idOfEditor = selectedEditorId;
-    let codeBody = editors[idOfEditor - 1].value;
-    let language = editors[idOfEditor - 1].language;
-
-    //console.log(codeBody, language);
-
-    const response = await axios.post(
-      "http://localhost:8000/run",
-      { language, codeBody },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const codeBody = editors.find((editor) => editor.id === selectedEditorId)?.value;
+    const language = editors.find((editor) => editor.id === selectedEditorId)?.language;
+    const response = await axios.post("http://localhost:8000/run", { language, codeBody }, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    });
     setOutput(response.data.output);
   };
 
   //Run click handler of auth user
 
   const handleRunClickAuth = async () => {
-    let idOfEditor = selectedEditorId;
-    let codeBody = editors[idOfEditor - 1].value;
-    let language = editors[idOfEditor - 1].language;
-
-    //console.log(codeBody, language);
-
-    const response = await axios.post(
-      "http://localhost:8000/user/run",
-      { language, codeBody },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const codeBody = editors.find((editor) => editor.id === selectedEditorId)?.value;
+    const language = editors.find((editor) => editor.id === selectedEditorId)?.language;
+    const response = await axios.post("http://localhost:8000/user/run", { language, codeBody }, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    });
     setOutput(response.data.output);
   };
 
   //codeSubmit handler
   const handleCodeSubmit = async () => {
-    let idOfEditor = selectedEditorId;
-    let codeBody = editors[idOfEditor - 1].value;
-    let codeLanguage = editors[idOfEditor - 1].language;
-    let name = editors[idOfEditor - 1].name;
-
-    //console.log(name,codeBody,codeLanguage);
-
-    const response = await axios.post(
-      "http://localhost:5000/user/submit",
-      { name, codeBody, codeLanguage },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const codeBody = editors.find((editor) => editor.id === selectedEditorId)?.value;
+    const codeLanguage = editors.find((editor) => editor.id === selectedEditorId)?.language;
+    const name = editors.find((editor) => editor.id === selectedEditorId)?.name;
+    const response = await axios.post("http://localhost:5000/user/submit", { name, codeBody, codeLanguage }, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    });
     console.log(response.status);
   };
 

@@ -4,27 +4,22 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(
-    151deg,
-    rgba(0, 0, 0, 1) 20%,
-    rgba(64, 10, 92, 1) 87%
-  );
+  background-image: url('../../assets/coderankbg.jpeg');
+  background-color:  rgba(64, 10, 92, 1);
   color: #fff;
 }
 
 /* Login form styles */
 .login-form {
-  background: linear-gradient(135deg, #212121, #303030);
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
-
+  background: linear-gradient(135deg, #000000, #303030);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
   width: 400px;
   max-width: 90%;
 }
 
-.login-form h2 {
-    
+.login-form h2 { 
   margin-bottom: 30px;
   font-size: 24px;
   text-align: center;
@@ -72,4 +67,8 @@
 
 .login-form button:hover {
   background-color: #340443;
+}
+
+.link {
+  color: white;
 }
