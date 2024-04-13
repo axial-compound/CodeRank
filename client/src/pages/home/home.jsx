@@ -11,8 +11,8 @@ const Home = () => {
 
   return (
     <div className={`home ${animate ? 'animate' : ''}`}>
-      <h1>Welcome to CodeRank</h1>
-      <h4>Your Cloud Code Editor</h4>
+      <h1>Welcome to <span className="code-animation">CodeRank</span></h1>
+      <h4><span className="editor-animation">Cloud Code Editor</span></h4>
       <NavLink to="/login">
         <button className="glow-on-hover" type="button">Login To Continue</button>
       </NavLink>
