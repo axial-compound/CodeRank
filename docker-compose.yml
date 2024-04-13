@@ -1,0 +1,89 @@
+version: 'v1'
+
+services:
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    networks:
+      - mynetwork
+    image: client-server
+
+  api-gateway:
+    build:
+      context: ./server/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+    image: api-gateway-server
+    environment:
+      - NODE_ENV=production
+    env_file: .env
+
+  codeExecution:
+    build:
+      context: ./server/codeExecution
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+    image: code-executor-server
+    environment:
+      - NODE_ENV=production
+    env_file: .env
+
+  python-compiler:
+    image: python-compiler
+    build:
+      context: ./server/python-compiler
+      dockerfile: Dockerfile
+    working_dir: /app/server/python-compiler
+    command: bash
+    volumes:
+      - .:/app/server/python-compiler
+    networks:
+      - mynetwork
+
+  cpp-compiler:
+    image: cpp-compiler
+    build:
+      context: ./server/cpp-compiler
+      dockerfile: Dockerfile
+    working_dir: /app/server/cpp-compiler
+    command: bash
+    volumes:
+      - .:/app/server/cpp-compiler
+    networks:
+      - mynetwork
+
+  java-compiler:
+    image: java-compiler
+    build:
+      context: ./server/java-compiler
+      dockerfile: Dockerfile
+    working_dir: /app/server/java-compiler
+    command: bash
+    volumes:
+      - .:/app/server/java-compiler
+    networks:
+      - mynetwork
+
+  nodejs-compiler:
+    image: nodejs-compiler
+    build:
+      context: ./server/nodejs-compiler
+      dockerfile: Dockerfile
+    working_dir: /app/server/nodejs-compiler
+    command: bash
+    volumes:
+      - .:/app/server/nodejs-compiler
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
